@@ -7,7 +7,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="技术积累杂记">
 <meta name="theme-color" content="#000">
-<title>关于 | yy的小站</title>
+<title>DNS协议基础知识 | yy的小站</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1586341870294">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/gemini.css">
@@ -27,8 +27,8 @@
 
 
 
-    <meta name="description" content="关于" />
-    <meta name="keywords" content="" />
+    <meta name="description" content="DNS协议基础知识" />
+    <meta name="keywords" content="网络协议,GSLB" />
   </head>
   <body>
     <div class="head-top-line"></div>
@@ -198,9 +198,14 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#dns%E6%98%AF%E4%BB%80%E4%B9%88">DNS是什么？</a></li>
+<li><a href="#dns%E7%9A%84%E6%A0%91%E7%8A%B6%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84">DNS的树状层次结构</a></li>
+<li><a href="#dns%E7%9A%84%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B">DNS的解析流程</a></li>
+<li><a href="#dns%E7%BC%93%E5%AD%98">DNS缓存</a></li>
+<li><a href="#dns%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B">DNS记录类型</a></li>
+<li><a href="#dns%E5%8D%8F%E8%AE%AE%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F">DNS协议报文格式</a></li>
+<li><a href="#%E8%83%B6%E6%B0%B4%E8%AE%B0%E5%BD%95glue-record">胶水记录(Glue record)</a></li>
+<li><a href="#dns%E4%BC%98%E7%A7%80%E7%9A%84go%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE">DNS优秀的go开源项目</a></li>
 </ul>
 </li>
 </ul>
@@ -464,8 +469,8 @@ window.addEventListener('load', function() {
             <div class="section bg-color post post-page">
               <header class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://xly0713.github.io/post/about/">
-      关于
+    <a class="post-title-link" href="https://xly0713.github.io/post/dns/">
+      DNS协议基础知识
     </a>
   </h1>
   <div class="post-meta">
@@ -473,33 +478,103 @@ window.addEventListener('load', function() {
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span>发布于</span>
-      <span>2019-01-25</span>
+      <span>2020-01-25</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
+      <span class="meta-item">
+        <i class="fa fa-folder-o"></i>
+        <span class="pc-show">分类于</span>
+        
+          
+            <a href="https://xly0713.github.io/tag/Q1k2X6rnU/">
+              <span>网络协议</span>
+            </a>、
+          
+        
+          
+            <a href="https://xly0713.github.io/tag/pRwAbJURI/">
+              <span>GSLB</span>
+            </a>
+          
+        
+      </span>
+      <span class="post-meta-divider">|</span>
+    
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>1分钟</span>
+      <span>3分钟</span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>105<span class="pc-show">字数</span></span>
+      <span>790<span class="pc-show">字数</span></span>
     </span>
     
   </div>
 </header>
               <div class="post-body next-md-body" id="post_body">
-                <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本站用来记录一些技术，所有帮助自己整理零碎的知识，希望对他人有所帮助。欢迎<a href="/atom.xml">RSS</a>订阅本站。</p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<p>博主是一名后台研发攻城狮，关注云计算相关领域，目前专注于CDN技术和直播技术。</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
+                <p>本文是对DNS协议的简单整理介绍。</p>
+<!-- more -->
+<h2 id="dns是什么">DNS是什么？</h2>
+<p>DNS是互联网世界的地址薄，类似于电话本，主要提供将域名映射到IP地址的功能。</p>
+<h2 id="dns的树状层次结构">DNS的树状层次结构</h2>
 <ul>
-<li>邮件: xly880713@gmail.com</li>
+<li>第一层: 根DNS服务器，负责返回顶级DNS(TLD)服务器的IP地址。目前全世界有13台服务节点。</li>
+<li>第二层: TLD服务器，负责返回权威DNS服务器的IP地址。</li>
+<li>第三层: 权威DNS服务器，负责返回响应主机或域名的IP地址。<br>
+<img src="https://xly0713.github.io/post-images/1586003718190.png" alt="" loading="lazy"></li>
+</ul>
+<h2 id="dns的解析流程">DNS的解析流程</h2>
+<p>在未命中缓存的情况下，DNS完成域名的解析需要经过如下步骤:</p>
+<ol>
+<li>用户在浏览器中输入“example.com”, 查询由本地DNS服务(<strong>递归服务器</strong>)解析器接收。</li>
+<li><strong>递归服务器</strong>查询<strong>根DNS域名服务器</strong>。</li>
+<li><strong>根DNS服务器</strong>使用<strong>顶级DNS(TLD)服务器</strong>(例如.com或.net)的地址响应给<strong>递归服务器</strong>。如：“example.com”，则返回.com TLD的IP地址。</li>
+<li><strong>递归服务器</strong>向.com<strong>顶级DNS(TLD)服务器</strong>发出请求。</li>
+<li><strong>顶级DNS(TLD)服务器</strong>响应<strong>权威DNS服务器</strong>的IP地址。</li>
+<li><strong>递归服务器</strong>向<strong>权威DNS服务器</strong>翻出请求。</li>
+<li><strong>权威DNS服务器</strong>响应example.com的IP地址给<strong>递归服务器</strong>。</li>
+<li><strong>递归DNS服务器</strong>将example.com的IP地址响应给浏览器。（<em>DNS解析完成</em>）</li>
+<li>浏览器向example.com的IP地址发出HTTP请求...<br>
+<img src="https://xly0713.github.io/post-images/1586005095657.png" alt="" loading="lazy"></li>
+</ol>
+<h2 id="dns缓存">DNS缓存</h2>
+<p>在未命中缓存的情形下，DNS解析的流程是复杂且耗时的。DNS数据可以被缓存在多个位置，每个位置可以在一段时间内(记录生存时间TTL)缓存DNS数据记录:</p>
+<ul>
+<li>浏览器DNS缓存</li>
+<li>操作系统级DNS缓存</li>
+<li>递归DNS服务器级别缓存。<em>如果域名缓存未命中，但是命中了该域名的NS记录，则跳过请求根和TLD服务器；如果没有NS记录，但是命中了TLD的记录，则跳过请求根服务器；如果没有命中TLD的记录，则要完整走完迭代访问根DNS服务器到权威服务器这一全流程了。</em></li>
+</ul>
+<h2 id="dns记录类型">DNS记录类型</h2>
+<ul>
+<li>常见类型：</li>
+</ul>
+<ol>
+<li>A记录: 域名映射的IPv4地址。</li>
+<li>CNAME记录：域名别名映射，将域名指向另外一个域名。</li>
+<li>NS记录：域名映射的权威服务器记录。</li>
+<li>AAAA记录：域名映射的IPv6地址。</li>
+<li>MX记录：域名映射的邮箱服务器地址。</li>
+<li>TXT记录：允许管理员在记录中存储文本。</li>
+<li>SOA记录：存储有关域的管理员信息。</li>
+<li>SRV记录：指定特定服务的端口。</li>
+<li>PTR记录：在反向查询中提供域名。</li>
+</ol>
+<h2 id="dns协议报文格式">DNS协议报文格式</h2>
+<ul>
+<li>https://jocent.me/2017/06/18/dns-protocol-principle.html</li>
+</ul>
+<h2 id="胶水记录glue-record">胶水记录(Glue record)</h2>
+<p>当给<strong>域名A</strong>配置NS记录时，如果NS记录为<strong>域名A</strong>的子域名，则必须配置NS记录的A记录。</p>
+<ul>
+<li>通常会在DNS提供商哪里申请两个域名，而不采用胶水记录方式。</li>
+<li>参考链接：https://www.jianshu.com/p/7d69ec2976c7</li>
+</ul>
+<h2 id="dns优秀的go开源项目">DNS优秀的go开源项目</h2>
+<ul>
+<li>https://github.com/miekg/dns</li>
+<li>https://github.com/abh/geodns （使用miekg/dns）</li>
 </ul>
 
               </div>
@@ -511,7 +586,7 @@ window.addEventListener('load', function() {
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://xly0713.github.io/post/about/" title="关于">关于</a>
+      <a href="https://xly0713.github.io/post/dns/" title="DNS协议基础知识">DNS协议基础知识</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -519,6 +594,10 @@ window.addEventListener('load', function() {
     </li>
   </ul>
   <div class="tags">
+    
+      <a href="https://xly0713.github.io/tag/Q1k2X6rnU/"># 网络协议</a>
+    
+      <a href="https://xly0713.github.io/tag/pRwAbJURI/"># GSLB</a>
     
   </div>
   <div class="nav">
