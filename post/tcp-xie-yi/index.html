@@ -7,7 +7,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>关于 | yy的小站</title>
+<title>TCP协议基础 | yy的小站</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1586423348638">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/gemini.css">
@@ -37,8 +37,8 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-    <meta name="description" content="关于" />
-    <meta name="keywords" content="" />
+    <meta name="description" content="TCP协议基础" />
+    <meta name="keywords" content="网络协议" />
   </head>
   <body>
     <div class="head-top-line"></div>
@@ -208,9 +208,32 @@ var _hmt = _hmt || [];
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#tcp%E5%BB%BA%E8%BF%9E-%E6%96%AD%E8%BF%9E">tcp建连、断连</a>
+<ul>
+<li><a href="#%E7%A4%BA%E6%84%8F%E5%9B%BE">示意图</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B">为什么需要三次握手？</a></li>
+<li><a href="#tcp%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E4%BB%80%E4%B9%88%E5%90%AB%E4%B9%89">tcp面向连接什么含义？</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B">为什么需要四次挥手？</a></li>
+<li><a href="#time_wait%E7%8A%B6%E6%80%81">TIME_WAIT状态</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%86%85%E6%A0%B8%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE">三次握手内核实现原理示意图</a>
+<ul>
+<li><a href="#%E9%98%9F%E5%88%97%E9%95%BF%E5%BA%A6%E9%85%8D%E7%BD%AE">队列长度配置</a></li>
+<li><a href="#syn%E6%94%BB%E5%87%BB">SYN攻击</a>
+<ul>
+<li><a href="#%E5%BA%94%E5%AF%B9syn%E6%94%BB%E5%87%BB%E7%9A%84%E5%8F%82%E6%95%B0">应对SYN攻击的参数</a></li>
+<li><a href="#tcp_syncokkies">tcp_syncokkies</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8E%A7%E5%88%B6tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E7%9A%84%E5%8F%82%E6%95%B0">控制TCP三次握手的参数</a></li>
+</ul>
+</li>
+<li><a href="#tfotcp-fast-open">TFO(TCP Fast Open)</a>
+<ul>
+<li><a href="#%E7%A4%BA%E6%84%8F%E5%9B%BE-2">示意图</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -474,8 +497,8 @@ window.addEventListener('load', function() {
             <div class="section bg-color post post-page">
               <header class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://xly0713.github.io/post/about/">
-      关于
+    <a class="post-title-link" href="https://xly0713.github.io/post/tcp-xie-yi/">
+      TCP协议基础
     </a>
   </h1>
   <div class="post-meta">
@@ -483,34 +506,100 @@ window.addEventListener('load', function() {
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span>发布于</span>
-      <span>2019-01-25</span>
+      <span>2020-02-02</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
+      <span class="meta-item">
+        <i class="fa fa-folder-o"></i>
+        <span class="pc-show">分类于</span>
+        
+          
+            <a href="https://xly0713.github.io/tag/Q1k2X6rnU/">
+              <span>网络协议</span>
+            </a>
+          
+        
+      </span>
+      <span class="post-meta-divider">|</span>
+    
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>1分钟</span>
+      <span>4分钟</span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>105<span class="pc-show">字数</span></span>
+      <span>882<span class="pc-show">字数</span></span>
     </span>
     
   </div>
 </header>
               <div class="post-body next-md-body" id="post_body">
-                <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本站用来记录一些技术，所有帮助自己整理零碎的知识，希望对他人有所帮助。欢迎<a href="/atom.xml">RSS</a>订阅本站。</p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<p>博主是一名后台研发攻城狮，关注云计算相关领域，目前专注于CDN技术和直播技术。</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
+                <p>本文是对tcp协议基础知识的整理介绍。</p>
+<!-- more -->
+<h2 id="tcp建连-断连">tcp建连、断连</h2>
+<h3 id="示意图">示意图</h3>
+<figure data-type="image" tabindex="1"><img src="https://xly0713.github.io/post-images/1586241639078.png" alt="" loading="lazy"></figure>
+<h3 id="为什么需要三次握手">为什么需要三次握手？</h3>
 <ul>
-<li>邮件: xly880713@gmail.com</li>
+<li>防止失效的连接请求到达服务器。</li>
+<li>具体描述：如果client发送的连接请求SYN包在网络中滞留了较长时间，server最终仍会收到并发回连接确认SYN+ACK。而client等待一个超时时间后，认为刚才滞留的连接请求包丢失了，则会重新发送SYN包发起连接请求。如果不进行第三次握手，那么server收到滞留的SYN包就打开的连接是无效的；如果有第三次握手，那么client会忽略server对滞留的SYN包的响应SYN+ACK，不回复ACK包，server收不到第三次握手ACK包就不会新建连接。</li>
 </ul>
+<h3 id="tcp面向连接什么含义">tcp面向连接什么含义？</h3>
+<p>为了在client和server间维护连接，需建立一定的数据结构来维护双方的交互状态，用这样的数据结构来保证面向连接的特性。</p>
+<h3 id="为什么需要四次挥手">为什么需要四次挥手？</h3>
+<p>一端发送FIN包请求释放连接，对端收到这个FIN报文后进入了<code>CLOSE_WAIT</code>状态。这个状态下，仍然可以向对方发送未发送完毕的数据，数据发送完毕后也要向对端发送FIN报文释放连接，忘了发FIN包(调用close())会导致bug。也就是说，TCP是全双工传输，两端都必须发送FIN包，才能完全断开连接。</p>
+<h3 id="time_wait状态">TIME_WAIT状态</h3>
+<p>主动发送FIN包的一端，在收到对端的FIN报文后进入<code>TIME_WAIT</code>状态，这个状态一般要保持一个较长的时间2MSL。原因如下：</p>
+<ul>
+<li>确保最后一个应答FIN的报文ACK能够到达。因为如果对端没有收到ACK应答，则会重发FIN包。</li>
+<li>让当前连接在网络中可能的所有报文达到生存期上限后消失，使得下一个新的连接不会收到旧的连接的数据。</li>
+</ul>
+<h2 id="三次握手内核实现原理示意图">三次握手内核实现原理示意图</h2>
+<figure data-type="image" tabindex="2"><img src="https://xly0713.github.io/post-images/1586239797212.png" alt="" loading="lazy"></figure>
+<h3 id="队列长度配置">队列长度配置</h3>
+<ul>
+<li>SYN队列长度配置: <code>net.ipv4.tcp_max_syn_backlog = 8192 #SYN_RCVD状态连接的最大个数</code>;</li>
+<li>ACCEPT队列长度：
+<ul>
+<li>系统全局： <code>net.core.somaxconn = 262144 #系统全局ACCPET队列最大长度的配置</code></li>
+<li>应用层: socket API listen传参控制</li>
+</ul>
+</li>
+</ul>
+<h3 id="syn攻击">SYN攻击</h3>
+<p>攻击者迅速伪造不同IP地址的SYN报文，快速占满SYN队列，使得正常的SYN包无法加入队列。</p>
+<h4 id="应对syn攻击的参数">应对SYN攻击的参数</h4>
+<p><code>net.core.netdev_max_backlog = 262144 #接收自网卡、但是未被内核协议栈处理的IP报文队列长度</code><br>
+<code>net.ipv4.tcp_max_syn_backlog = 8192 #SYN_RCVD状态(半)连接的最大个数</code><br>
+<code>net.ipv4.tcp_abort_on_overflow = 1 #设置为1时表示: 队列满则响应RST包，丢弃连接</code></p>
+<h4 id="tcp_syncokkies">tcp_syncokkies</h4>
+<p><code>net.ipv4.tcp_syncookies = 1 #启用tcp cookie, 使得SYN队列满仍能建立连接</code></p>
+<h3 id="控制tcp三次握手的参数">控制TCP三次握手的参数</h3>
+<ul>
+<li>
+<p>SYN_SENT状态<br>
+<code>net.ip4.tcp_syn_retries = 6 #主动建立连接，发送SYN的重试次数</code><br>
+<code>net.ipv4.ip_local_port_range = 32768 60999 #建立连接时的本地端口可选范围</code></p>
+</li>
+<li>
+<p>SYN_RCVD状态<br>
+<code>net.ipv4.tcp_max_syn_backlog = 8192 #SYN_RCVD状态(半)连接的最大个数</code><br>
+<code>net.ipv4.tcp_synack_retries = 3 #被动建立连接时，发送SYN/ACK的重试次数</code></p>
+</li>
+</ul>
+<h2 id="tfotcp-fast-open">TFO(TCP Fast Open)</h2>
+<p>配置: <code>net.ipv4.tcp_fastopen</code>。（<strong>注意</strong>：内核版本要求在Linux 3.7以上）<br>
+可选值：</p>
+<ul>
+<li>0: 关闭(默认)</li>
+<li>1: 作为客户端时可以使用TFO</li>
+<li>2: 作为服务端时可以使用TFO</li>
+<li>3: 都可以使用TFO，无论是作为服务端还是客户端</li>
+</ul>
+<h3 id="示意图-2">示意图</h3>
+<figure data-type="image" tabindex="3"><img src="https://xly0713.github.io/post-images/1586263828481.png" alt="" loading="lazy"></figure>
 
               </div>
               <div class="post-footer">
@@ -521,7 +610,7 @@ window.addEventListener('load', function() {
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://xly0713.github.io/post/about/" title="关于">关于</a>
+      <a href="https://xly0713.github.io/post/tcp-xie-yi/" title="TCP协议基础">TCP协议基础</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -530,12 +619,22 @@ window.addEventListener('load', function() {
   </ul>
   <div class="tags">
     
+      <a href="https://xly0713.github.io/tag/Q1k2X6rnU/"># 网络协议</a>
+    
   </div>
   <div class="nav">
     <div class="nav-prev">
       
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="gperftools分析Nginx" href="https://xly0713.github.io/post/gperftools-fen-xi-nginx/">gperftools分析Nginx</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="gperftools分析Nginx" href="https://xly0713.github.io/post/gperftools-fen-xi-nginx/">上一篇</a>
+      
     </div>
     <div class="nav-next">
+      
+        <a class="nav-pc-next" title="DNS协议基础" href="https://xly0713.github.io/post/dns/">DNS协议基础</a>
+        <a class="nav-mobile-next" title="DNS协议基础" href="https://xly0713.github.io/post/dns/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>
