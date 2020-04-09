@@ -8,7 +8,7 @@
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
 <title>DNS协议基础 | yy的小站</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1586425184535">
+<link rel="shortcut icon" href="/favicon.ico?v=1586445559704">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/gemini.css">
 
@@ -542,7 +542,7 @@ window.addEventListener('load', function() {
 <ul>
 <li>第一层: 根DNS服务器，负责返回顶级DNS(TLD)服务器的IP地址。目前全世界有13台服务节点。</li>
 <li>第二层: TLD服务器，负责返回权威DNS服务器的IP地址。</li>
-<li>第三层: 权威DNS服务器，负责返回响应主机或域名的IP地址。<br>
+<li>第三层: 权威DNS服务器，负责返回相应主机或域名的IP地址。<br>
 <img src="https://xly0713.github.io/post-images/1586003718190.png" alt="" loading="lazy"></li>
 </ul>
 <h2 id="dns的解析流程">DNS的解析流程</h2>
@@ -634,6 +634,27 @@ window.addEventListener('load', function() {
   </div>
 </div>
               
+                
+                  
+                    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '52d02c95d4f1500d9f75',
+    clientSecret: '878436bbe0814eb17153aae1f385fe271ceff250',
+    repo: 'xly0713.github.io',
+    owner: 'xly0713',
+    admin: ['xly0713'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+                  
+                  
                 
               
             </div>
