@@ -8,7 +8,7 @@
 <meta name="keywords" content="Nginx 网络协议 源码分析 DNS 云计算">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>关于 | yz的小站</title>
+<title>ATS入门 | yz的小站</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1589122075211">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/gemini.css">
@@ -49,8 +49,8 @@
   })();
 </script>
 
-  <meta name="description" content="关于" />
-  <meta name="keywords" content="" />
+  <meta name="description" content="ATS入门" />
+  <meta name="keywords" content="Cache,CDN" />
 </head>
 
 <body>
@@ -242,9 +242,29 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-%E4%BB%A5trafficserver-805%E7%89%88%E6%9C%AC%E4%B8%BA%E4%BE%8B">安装 （以trafficserver-8.0.5版本为例）</a>
+<ul>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E4%BB%A3%E7%A0%81%E5%B9%B6%E8%A7%A3%E5%8E%8B">下载源代码并解压</a></li>
+<li><a href="#%E5%87%86%E5%A4%87c17%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83">准备c++17编译环境</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85tcl-dev-package">安装TCL dev package</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85openssl-devel">安装openssl-devel</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85lua-devel">安装lua-devel</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85ncurses-devel">安装ncurses-devel</a></li>
+<li><a href="#%E7%94%9F%E6%88%90makefile">生成Makefile</a></li>
+<li><a href="#%E6%9E%84%E5%BB%BA-%E6%B5%8B%E8%AF%95-%E5%AE%89%E8%A3%85">构建、测试、安装</a></li>
+<li><a href="#%E6%B1%87%E6%80%BB%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4">汇总安装步骤</a></li>
+</ul>
+</li>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a>
+<ul>
+<li><a href="#%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6recordsconfig">核心配置文件records.config</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%9B%9E%E6%BA%90%E6%98%A0%E5%B0%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6remapconfig">反向代理回源映射配置文件remap.config</a></li>
+<li><a href="#%E7%BC%93%E5%AD%98%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6cacheconfig">缓存相关配置文件cache.config</a></li>
+<li><a href="#%E5%AD%98%E5%82%A8%E9%85%8D%E7%BD%AEstorageconfig">存储配置storage.config</a></li>
+</ul>
+</li>
+<li><a href="#%E6%97%A5%E5%BF%97">日志</a></li>
+<li><a href="#%E6%8F%92%E4%BB%B6">插件</a></li>
 </ul>
 </li>
 </ul>
@@ -512,8 +532,8 @@
           <div class="section bg-color post post-page">
             <header class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://xly0713.github.io/post/about/">
-      关于
+    <a class="post-title-link" href="https://xly0713.github.io/post/ats-ru-men/">
+      ATS入门
     </a>
   </h1>
   <div class="post-meta">
@@ -521,33 +541,118 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span>发布于</span>
-      <span>2019-01-25</span>
+      <span>2020-04-13</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show">分类于</span>
+      
+      
+      <a href="https://xly0713.github.io/tag/cache/">
+        <span>Cache</span>
+      </a>、
+      
+      
+      
+      <a href="https://xly0713.github.io/tag/cdn/">
+        <span>CDN</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>1分钟</span>
+      <span>2分钟</span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>105<span class="pc-show">字数</span></span>
+      <span>348<span class="pc-show">字数</span></span>
     </span>
     
   </div>
 </header>
             <div class="post-body next-md-body" id="post_body">
-              <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本站主要用来记录一些技术，帮助自己整理零碎的知识，希望对他人有所帮助。欢迎<a href="/atom.xml">RSS</a>订阅本站。</p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<p>博主是一名后台研发攻城狮，关注云计算相关领域，目前专注于CDN技术和直播技术。</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <p>本文是对ATS的安装、配置、日志等相关基础知识的整理。</p>
+<!-- more -->
+<h2 id="安装-以trafficserver-805版本为例">安装 （以trafficserver-8.0.5版本为例）</h2>
+<h3 id="下载源代码并解压">下载源代码并解压</h3>
+<pre><code>yum -y install bzip2 wget
+wget https://mirror.bit.edu.cn/apache/trafficserver/trafficserver-8.0.5.tar.bz2
+tar xf trafficserver-8.0.5.tar.bz2
+</code></pre>
+<h3 id="准备c17编译环境">准备c++17编译环境</h3>
+<pre><code>yum -y install centos-release-scl
+yum -y install yum-utils
+yum-config-manager --enable rhel-server-rhscl-7-rpms
+yum -y install devtoolset-7
+
+scl enable devtoolset-7 zsh
+</code></pre>
+<h3 id="安装tcl-dev-package">安装TCL dev package</h3>
+<pre><code>yum -y install tcl-devel
+</code></pre>
+<h3 id="安装openssl-devel">安装openssl-devel</h3>
+<pre><code>yum -y install openssl-devel
+</code></pre>
+<h3 id="安装lua-devel">安装lua-devel</h3>
+<pre><code>yum -y install lua-devel
+</code></pre>
+<h3 id="安装ncurses-devel">安装ncurses-devel</h3>
+<pre><code>yum -y install ncurses-devel
+</code></pre>
+<h3 id="生成makefile">生成Makefile</h3>
+<pre><code>./configure --prefix=/opt/ats
+</code></pre>
+<h3 id="构建-测试-安装">构建、测试、安装</h3>
+<pre><code>make
+make test
+make install
+</code></pre>
+<h3 id="汇总安装步骤">汇总安装步骤</h3>
+<pre><code>yum -y install bzip2 wget tcl-devel openssl-devel lua-devel  ncurses-devel 
+yum -y install centos-release-scl yum-utils
+yum-config-manager --enable rhel-server-rhscl-7-rpms
+yum -y install devtoolset-7
+scl enable devtoolset-7 zsh
+
+./configure --prefix=/opt/ats
+make
+make test
+make install
+</code></pre>
+<h2 id="配置">配置</h2>
+<h3 id="核心配置文件recordsconfig">核心配置文件records.config</h3>
 <ul>
-<li>邮件: xly880713@gmail.com</li>
+<li>暂略，待补充</li>
+<li>特别的，可以配置启用UI方便查看ATS运行时关键信息、检索和删除缓存等</li>
+</ul>
+<h3 id="反向代理回源映射配置文件remapconfig">反向代理回源映射配置文件remap.config</h3>
+<ul>
+<li>暂略，待补充</li>
+</ul>
+<h3 id="缓存相关配置文件cacheconfig">缓存相关配置文件cache.config</h3>
+<ul>
+<li>暂略，待补充</li>
+</ul>
+<h3 id="存储配置storageconfig">存储配置storage.config</h3>
+<ul>
+<li>暂略，待补充</li>
+</ul>
+<h2 id="日志">日志</h2>
+<ul>
+<li>在records.config中配置日志路径、分割方式等</li>
+<li>squid风格的日志，使用traffic_logcat查看</li>
+</ul>
+<h2 id="插件">插件</h2>
+<ul>
+<li><a href="https://github.com/portl4t/ts-lua">lua插件</a></li>
+<li><a href="https://docs.trafficserver.apache.org/en/8.0.x/admin-guide/plugins/index.en.html">官方插件</a></li>
+<li><a href="https://docs.trafficserver.apache.org/en/8.0.x/developer-guide/plugins/index.en.html">插件开发指南</a></li>
 </ul>
 
             </div>
@@ -559,7 +664,7 @@
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://xly0713.github.io/post/about/" title="关于">https://xly0713.github.io/post/about/</a>
+      <a href="https://xly0713.github.io/post/ats-ru-men/" title="ATS入门">https://xly0713.github.io/post/ats-ru-men/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -568,12 +673,24 @@
   </ul>
   <div class="tags">
     
+      <a href="https://xly0713.github.io/tag/cache/"># Cache</a>
+    
+      <a href="https://xly0713.github.io/tag/cdn/"># CDN</a>
+    
   </div>
   <div class="nav">
     <div class="nav-prev">
       
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="zsh替代bash" href="https://xly0713.github.io/post/zsh-ti-dai-bash/">zsh替代bash</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="zsh替代bash" href="https://xly0713.github.io/post/zsh-ti-dai-bash/">上一篇</a>
+      
     </div>
     <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Nginx源码分析之--内存池" href="https://xly0713.github.io/post/nginx-yuan-ma-xue-xi/">Nginx源码分析之--内存池</a>
+        <a class="nav-mobile-next" title="Nginx源码分析之--内存池" href="https://xly0713.github.io/post/nginx-yuan-ma-xue-xi/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>
