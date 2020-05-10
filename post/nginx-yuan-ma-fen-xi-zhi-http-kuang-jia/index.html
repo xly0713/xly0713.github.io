@@ -8,7 +8,7 @@
 <meta name="keywords" content="Nginx 网络协议 源码分析 DNS 云计算">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>yy的小站</title>
+<title>Nginx源码分析之--http框架 | yy的小站</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1589110996287">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/gemini.css">
@@ -49,6 +49,8 @@
   })();
 </script>
 
+  <meta name="description" content="Nginx源码分析之--http框架" />
+  <meta name="keywords" content="Nginx,源码分析" />
 </head>
 
 <body>
@@ -156,10 +158,26 @@
   <div class="main-continer">
     
     <div
-      class="section-layout  gemini">
+      class="section-layout gemini ">
       <div class="section-layout-wrapper">
-        <div id="sidebarMeta" class="sidebar">
-    
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body gemini" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -216,91 +234,1246 @@
 
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number no_compress"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#http%E6%A1%86%E6%9E%B6%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E5%9B%BE">http框架初始化流程图</a></li>
+<li><a href="#%E7%BB%93%E5%90%88%E6%B5%81%E7%A8%8B%E7%AE%80%E5%9B%BE%E5%92%8C%E4%BB%A3%E7%A0%81%E6%8F%8F%E8%BF%B0%E6%80%BB%E4%BD%93%E6%B5%81%E7%A8%8B">结合流程简图和代码描述总体流程</a>
+<ul>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%89%80%E6%9C%89http%E6%A8%A1%E5%9D%97%E7%9A%84ctx_index%E5%BA%8F%E5%8F%B7">初始化所有HTTP模块的ctx_index序号</a></li>
+<li><a href="#%E5%88%86%E9%85%8D%E8%A7%A3%E6%9E%90http%E5%9D%97%E4%B8%8Bmain%E7%BA%A7%E5%88%AB%E9%85%8D%E7%BD%AE%E9%A1%B9%E6%97%B6%E5%AD%98%E6%94%BEhttp%E6%A8%A1%E5%9D%97%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88%E7%9A%843%E4%B8%AA%E6%95%B0%E7%BB%84">分配解析http{}块下main级别配置项时存放HTTP模块结构体指针的3个数组</a></li>
+<li><a href="#%E4%BE%9D%E6%AC%A1%E8%B0%83%E7%94%A8%E6%89%80%E6%9C%89http%E6%A8%A1%E5%9D%97%E7%9A%84create_mainsrvloc_conf%E5%85%B13%E4%B8%AA%E6%96%B9%E6%B3%95">依次调用所有HTTP模块的create_(main|srv|loc)_conf共3个方法</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%89%80%E6%9C%89http%E6%A8%A1%E5%9D%97%E7%9A%84preconfiguration%E6%96%B9%E6%B3%95">调用所有HTTP模块的preconfiguration方法</a></li>
+<li><a href="#%E8%A7%A3%E6%9E%90http%E5%9D%97%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89main%E7%BA%A7%E5%88%AB%E9%85%8D%E7%BD%AE%E9%A1%B9">解析http{}块下的所有main级别配置项</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%89%80%E6%9C%89http%E6%A8%A1%E5%9D%97%E7%9A%84init_main_conf%E6%96%B9%E6%B3%95">调用所有HTTP模块的init_main_conf方法</a></li>
+<li><a href="#%E5%90%88%E5%B9%B6main-srv-loc%E7%BA%A7%E5%88%AB%E4%B8%8Bserver-location%E7%9B%B8%E5%85%B3%E7%9A%84%E9%85%8D%E7%BD%AE%E9%A1%B9">合并main、srv、loc级别下server、location相关的配置项</a></li>
+<li><a href="#%E6%9E%84%E9%80%A0location%E7%BB%84%E6%88%90%E7%9A%84%E9%9D%99%E6%80%81%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%9F%A5%E6%89%BE%E6%A0%91">构造location组成的静态二叉平衡查找树</a></li>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%AF%E6%B7%BB%E5%8A%A0%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95%E7%9A%84http%E9%98%B6%E6%AE%B5%E7%9A%84%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84">初始化可添加处理方法的HTTP阶段的动态数组</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%89%80%E6%9C%89http%E6%A8%A1%E5%9D%97%E7%9A%84postconfiguration%E6%96%B9%E6%B3%95%E4%BD%BF%E4%B9%8B%E5%8F%AF%E4%BB%A5%E4%BB%8B%E5%85%A5http%E9%98%B6%E6%AE%B5">调用所有HTTP模块的postconfiguration方法使之可以介入HTTP阶段</a></li>
+<li><a href="#%E6%A0%B9%E6%8D%AE%E5%90%84%E4%B8%AAhttp%E6%A8%A1%E5%9D%97%E4%BB%8B%E5%85%A5%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95%E6%9E%84%E9%80%A0%E5%87%BAphase_engine_handlers%E6%95%B0%E7%BB%84">根据各个HTTP模块介入的处理方法构造出phase_engine_handlers数组</a></li>
+<li><a href="#%E6%9E%84%E9%80%A0server%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E6%9E%84%E6%88%90%E7%9A%84%E6%94%AF%E6%8C%81%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E6%95%A3%E5%88%97%E8%A1%A8">构造server虚拟主机构成的支持通配符的散列表</a></li>
+<li><a href="#%E6%9E%84%E9%80%A0%E7%9B%91%E5%90%AC%E7%AB%AF%E5%8F%A3%E4%B8%8Eserver%E9%97%B4%E7%9A%84%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB%E5%B9%B6%E8%AE%BE%E7%BD%AE%E6%96%B0%E8%BF%9E%E6%8E%A5%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%9B%9E%E8%B0%83%E6%96%B9%E6%B3%95">构造监听端口与server间的关联关系，并设置新连接事件的回调方法</a></li>
+</ul>
+</li>
+<li><a href="#http%E8%AF%B7%E6%B1%82%E7%9A%8411%E4%B8%AA%E9%98%B6%E6%AE%B5">http请求的11个阶段</a>
+<ul>
+<li><a href="#%E6%9E%84%E9%80%A0phase_engine_handlers%E6%95%B0%E7%BB%84">构造phase_engine_handlers数组</a></li>
+<li><a href="#checker%E6%96%B9%E6%B3%95">checker方法</a>
+<ul>
+<li><a href="#ngx_http_core_generic_phase">ngx_http_core_generic_phase</a></li>
+<li><a href="#ngx_http_core_rewrite_phase">ngx_http_core_rewrite_phase</a></li>
+<li><a href="#ngx_http_core_find_config_phase">ngx_http_core_find_config_phase</a></li>
+<li><a href="#ngx_http_core_post_rewrite_phase">ngx_http_core_post_rewrite_phase</a></li>
+<li><a href="#ngx_http_core_access_phase">ngx_http_core_access_phase</a></li>
+<li><a href="#ngx_http_core_post_access_phase">ngx_http_core_post_access_phase</a></li>
+<li><a href="#ngx_http_core_content_phase">ngx_http_core_content_phase</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E7%BB%8F%E8%BF%8710%E4%B8%AA%E9%98%B6%E6%AE%B5">处理请求经过10个阶段</a></li>
+<li><a href="#%E8%AE%B0%E5%BD%95http%E6%97%A5%E5%BF%97%E9%98%B6%E6%AE%B5%E7%89%B9%E6%AE%8A%E5%A4%84%E7%90%86">记录http日志阶段特殊处理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
 </div>
+
 <script>
-  let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'gemini';
-  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
-  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
-    document.addEventListener('scroll', function(e) {
-      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
-        sidebarWrapper.classList.add('home-sidebar-fixed')
-      } else {
-        sidebarWrapper.classList.remove('home-sidebar-fixed')
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
       }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
     });
   }
-  </script>
-        <div class="section-box tag-line box-shadow-wrapper">
-          <section class="section tags-section posts-expand bg-color">
-            <div class="padding-wrapper">
-  <div class="tag-timeline-box">
-    <div class="tag-timeline-wrapper">
-      <div class="tag-timeline-title">
-        <h2>
-          源码分析
-          <small>标签</small>
-        </h2>
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
       </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    window.Velocity(hideElement, 'stop');
+    window.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        window.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <header class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">
+      Nginx源码分析之--http框架
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span>发布于</span>
+      <span>2020-05-10</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show">分类于</span>
+      
+      
+      <a href="https://xly0713.github.io/tag/ZUZBgmRmp/">
+        <span>Nginx</span>
+      </a>、
       
       
       
-      
-      
-      <a href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">
-        <div class="motion-warpper">
-          <div class="tag-post-node">
-            <h1>
-              05-10
-              <small>Nginx源码分析之--http框架</small>
-            </h1>
-          </div>
-        </div>
+      <a href="https://xly0713.github.io/tag/1FH1KPhrG/">
+        <span>源码分析</span>
       </a>
       
       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>20分钟</span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>4089<span class="pc-show">字数</span></span>
+    </span>
+    
+  </div>
+</header>
+            <div class="post-body next-md-body" id="post_body">
+              <p>Nginx的http功能和模块使用广泛，那么Nginx的http框架是如何初始化的呢？http请求的11个处理阶段又是怎么设计的呢？</p>
+<!-- more -->
+<h2 id="http框架初始化流程图">http框架初始化流程图</h2>
+<figure data-type="image" tabindex="1"><img src="https://xly0713.github.io/post-images/1589099904999.jpg" alt="" loading="lazy"></figure>
+<h2 id="结合流程简图和代码描述总体流程">结合流程简图和代码描述总体流程</h2>
+<p>当配置文件nginx.conf配置了http{...}并被解析到时，http框架通过执行ngx_http_block函数开始初始化：</p>
+<pre><code>static char *
+ngx_http_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
+{
+    char                        *rv;
+    ngx_uint_t                   mi, m, s;
+    ngx_conf_t                   pcf;
+    ngx_http_module_t           *module;
+    ngx_http_conf_ctx_t         *ctx;
+    ngx_http_core_loc_conf_t    *clcf;
+    ngx_http_core_srv_conf_t   **cscfp;
+    ngx_http_core_main_conf_t   *cmcf;
+
+    if (*(ngx_http_conf_ctx_t **) conf) {
+        return &quot;is duplicate&quot;;
+    }
+
+    /* the main http context */
+
+    ctx = ngx_pcalloc(cf-&gt;pool, sizeof(ngx_http_conf_ctx_t));
+    if (ctx == NULL) {
+        return NGX_CONF_ERROR;
+    }
+
+    *(ngx_http_conf_ctx_t **) conf = ctx;
+
+    /*初始化所有HTTP模块的ctx_index序号*/
+    ngx_http_max_module = ngx_count_modules(cf-&gt;cycle, NGX_HTTP_MODULE);
+
+    /*分配解析http{}块下main级别配置项时存放HTTP模块结构体指针的3个数组main_conf、srv_conf、loc_conf*/
+    ctx-&gt;main_conf = ngx_pcalloc(cf-&gt;pool,
+                                 sizeof(void *) * ngx_http_max_module);
+    if (ctx-&gt;main_conf == NULL) {
+        return NGX_CONF_ERROR;
+    }
+
+    ctx-&gt;srv_conf = ngx_pcalloc(cf-&gt;pool, sizeof(void *) * ngx_http_max_module);
+    if (ctx-&gt;srv_conf == NULL) {
+        return NGX_CONF_ERROR;
+    }
+
+    ctx-&gt;loc_conf = ngx_pcalloc(cf-&gt;pool, sizeof(void *) * ngx_http_max_module);
+    if (ctx-&gt;loc_conf == NULL) {
+        return NGX_CONF_ERROR;
+    }
+
+    /*
+     * 处理http{}块内的main级别配置时，对每个HTTP模块，都会调用create_(main|srv|loc)_conf等3个方法
+     */
+    for (m = 0; cf-&gt;cycle-&gt;modules[m]; m++) {
+        if (cf-&gt;cycle-&gt;modules[m]-&gt;type != NGX_HTTP_MODULE) {
+            continue; //跳过非http模块
+        }
+
+        module = cf-&gt;cycle-&gt;modules[m]-&gt;ctx;
+        mi = cf-&gt;cycle-&gt;modules[m]-&gt;ctx_index;
+
+        if (module-&gt;create_main_conf) {
+            ctx-&gt;main_conf[mi] = module-&gt;create_main_conf(cf); //main级别
+            if (ctx-&gt;main_conf[mi] == NULL) {
+                return NGX_CONF_ERROR;
+            }
+        }
+
+        if (module-&gt;create_srv_conf) {
+            ctx-&gt;srv_conf[mi] = module-&gt;create_srv_conf(cf); //server级别
+            if (ctx-&gt;srv_conf[mi] == NULL) {
+                return NGX_CONF_ERROR;
+            }
+        }
+
+        if (module-&gt;create_loc_conf) {
+            ctx-&gt;loc_conf[mi] = module-&gt;create_loc_conf(cf); //location级别
+            if (ctx-&gt;loc_conf[mi] == NULL) {
+                return NGX_CONF_ERROR;
+            }
+        }
+    }
+
+    pcf = *cf;
+    cf-&gt;ctx = ctx;
+
+    for (m = 0; cf-&gt;cycle-&gt;modules[m]; m++) {
+        if (cf-&gt;cycle-&gt;modules[m]-&gt;type != NGX_HTTP_MODULE) {
+            continue;
+        }
+
+        module = cf-&gt;cycle-&gt;modules[m]-&gt;ctx;
+
+        if (module-&gt;preconfiguration) {
+            if (module-&gt;preconfiguration(cf) != NGX_OK) {
+                return NGX_CONF_ERROR;
+            }
+        }
+    }
+
+    /* 解析http{} main配置 */
+    cf-&gt;module_type = NGX_HTTP_MODULE;
+    cf-&gt;cmd_type = NGX_HTTP_MAIN_CONF;
+    rv = ngx_conf_parse(cf, NULL); //解析内部配置
+
+    if (rv != NGX_CONF_OK) {
+        goto failed;
+    }
+
+    cmcf = ctx-&gt;main_conf[ngx_http_core_module.ctx_index];
+    cscfp = cmcf-&gt;servers.elts;
+
+    for (m = 0; cf-&gt;cycle-&gt;modules[m]; m++) {
+        if (cf-&gt;cycle-&gt;modules[m]-&gt;type != NGX_HTTP_MODULE) {
+            continue;
+        }
+
+        module = cf-&gt;cycle-&gt;modules[m]-&gt;ctx;
+        mi = cf-&gt;cycle-&gt;modules[m]-&gt;ctx_index;
+
+        //调用所有HTTP模块的init_main_conf方法，保存main级别配置
+        if (module-&gt;init_main_conf) {
+            rv = module-&gt;init_main_conf(cf, ctx-&gt;main_conf[mi]);
+            if (rv != NGX_CONF_OK) {
+                goto failed;
+            }
+        }
+
+        //合并ngx_modules[m]模块main、srv、loc配置
+        rv = ngx_http_merge_servers(cf, cmcf, module, mi);
+        if (rv != NGX_CONF_OK) {
+            goto failed;
+        }
+    }
+
+    /* 构造location组成的静态二叉平衡查找树 */
+    for (s = 0; s &lt; cmcf-&gt;servers.nelts; s++) {
+
+        clcf = cscfp[s]-&gt;ctx-&gt;loc_conf[ngx_http_core_module.ctx_index];
+
+        //将ngx_http_core_loc_conf_t组成的双向链表按照location匹配字符串进行排序
+        if (ngx_http_init_locations(cf, cscfp[s], clcf) != NGX_OK) {
+            return NGX_CONF_ERROR;
+        }
+
+        //根据已经排序过的的双向链表，构建静态的二叉查找树
+        if (ngx_http_init_static_location_trees(cf, clcf) != NGX_OK) {
+            return NGX_CONF_ERROR;
+        }
+    }
+
+    /* 初始化可添加处理方法的HTTP阶段的动态数组 */
+    if (ngx_http_init_phases(cf, cmcf) != NGX_OK) {
+        return NGX_CONF_ERROR;
+    }
+
+    if (ngx_http_init_headers_in_hash(cf, cmcf) != NGX_OK) {
+        return NGX_CONF_ERROR;
+    }
+
+    /* 调用所有HTTP模块的postconfiguration方法，使之可以介入HTTP请求处理阶段 */
+    for (m = 0; cf-&gt;cycle-&gt;modules[m]; m++) {
+        if (cf-&gt;cycle-&gt;modules[m]-&gt;type != NGX_HTTP_MODULE) {
+            continue;
+        }
+
+        module = cf-&gt;cycle-&gt;modules[m]-&gt;ctx;
+
+        if (module-&gt;postconfiguration) {
+            if (module-&gt;postconfiguration(cf) != NGX_OK) {
+                return NGX_CONF_ERROR;
+            }
+        }
+    }
+
+    if (ngx_http_variables_init_vars(cf) != NGX_OK) {
+        return NGX_CONF_ERROR;
+    }
+
+    /*
+     * http{}'s cf-&gt;ctx was needed while the configuration merging
+     * and in postconfiguration process
+     */
+
+    *cf = pcf;
+
+    //根据各个HTTP模块介入的处理方法构造出phase_engine_handlers数组
+    if (ngx_http_init_phase_handlers(cf, cmcf) != NGX_OK) {
+        return NGX_CONF_ERROR;
+    }
+
+
+    //构造监听端口与server间的关联关系，设置新连接事件的回调方法
+    if (ngx_http_optimize_servers(cf, cmcf, cmcf-&gt;ports) != NGX_OK) {
+        return NGX_CONF_ERROR;
+    }
+
+    return NGX_CONF_OK;
+
+failed:
+
+    *cf = pcf;
+
+    return rv;
+}
+</code></pre>
+<h3 id="初始化所有http模块的ctx_index序号">初始化所有HTTP模块的ctx_index序号</h3>
+<ul>
+<li>ctx_index表示模块在同类型模块中的索引，比如ngx_http_core_module是HTTP模块（NGX_HTTP_MODULE）的首个模块，那么该模块的ctx_index为0。</li>
+</ul>
+<h3 id="分配解析http块下main级别配置项时存放http模块结构体指针的3个数组">分配解析http{}块下main级别配置项时存放HTTP模块结构体指针的3个数组</h3>
+<ul>
+<li>分配main_conf数组用于保存各个HTTP模块在main级别可能创建的xx_main_conf_t结构体</li>
+<li>分配srv_conf数组用于保存各个HTTP模块在main级别可能创建的xx_srv_conf_t结构体</li>
+<li>分配loc_conf数组用于保存各个HTTP模块在main级别可能创建的xx_loc_conf_t结构体</li>
+<li>另外，必须同时创建3个数组。因为对于HTTP模块来说，某个指令有可能同时出现在main、srv、loc级别。实际应用配置项时，具体以那个级别的配置项为准，需要合并处理。</li>
+</ul>
+<h3 id="依次调用所有http模块的create_mainsrvloc_conf共3个方法">依次调用所有HTTP模块的create_(main|srv|loc)_conf共3个方法</h3>
+<p>每个HTTP模块可以实现模块上下文<code>ngx_http_module_t</code>的这3个回调方法，如果实现，则：</p>
+<ul>
+<li>调用create_main_conf，分配每个HTTP模块main级别的xx_main_conf_t结构体内存，并对字段赋初始值</li>
+<li>调用create_srv_conf，分配每个HTTP模块main级别的xx_srv_conf_t结构体内存，并对字段赋初始值</li>
+<li>调用create_loc_conf，分配每个HTTP模块main级别的xx_loc_conf_t结构体内存，并对字段赋初始值</li>
+</ul>
+<h3 id="调用所有http模块的preconfiguration方法">调用所有HTTP模块的preconfiguration方法</h3>
+<p>每个HTTP模块可以实现模块上下文<code>ngx_http_module_t</code>的<code>preconfiguration</code>回调方法，如果实现，则:</p>
+<ul>
+<li>调用preconfiguration方法, 一般用于添加变量</li>
+</ul>
+<h3 id="解析http块下的所有main级别配置项">解析http{}块下的所有main级别配置项</h3>
+<ul>
+<li>交由conf模块解析http{}块下的配置
+<ul>
+<li>特别的，如果内部碰到server{}块时，则会分配srv_conf、loc_conf数组分别用于保存各个HTTP模块在server级别可能创建的xx_srv_conf_t、xx_loc_conf_t结构体。然后调用create_srv_conf、create_loc_conf分配每个HTTP模块在server级别的xx_(srv|loc)_conf_t结构体内存，并对字段赋初始值
+<ul>
+<li>特别的，如果内部碰到location{}块时，则会分配loc_conf数组分别用于保存各个HTTP模块在location级别可能创建的xx_loc_conf_t结构体。然后调用create_loc_conf分配每个HTTP模块在location级别的xx_loc_conf_t结构体内存，并对字段赋初始值</li>
+<li>location{}下的配置解析完，则各个HTTP模块在location级别的xxx_loc_conf_t结构体赋值完成</li>
+</ul>
+</li>
+<li>server{}下的配置解析完，则各个HTTP模块在server级别的xx_(srv|loc)_conf_t结构体赋值完成</li>
+</ul>
+</li>
+</ul>
+<h3 id="调用所有http模块的init_main_conf方法">调用所有HTTP模块的init_main_conf方法</h3>
+<p>每个HTTP模块可以实现模块上下文<code>ngx_http_module_t</code>的init_main_conf回调方法, 如果实现，则：</p>
+<ul>
+<li>配置解析完成后，调用init_main_conf方法，最终确定并保存各个HTTP模块在main级别的xx_main_conf_t配置结构体</li>
+</ul>
+<h3 id="合并main-srv-loc级别下server-location相关的配置项">合并main、srv、loc级别下server、location相关的配置项</h3>
+<p>对每一server{}而言，每个HTTP模块可以实现模块上下文<code>ngx_http_module_t</code>的merge_srv_conf和merge_loc_conf回调方法, 如果实现，则：</p>
+<ul>
+<li>调用merge_srv_conf和merge_loc_conf方法，最终确定并保存各个HTTP模块在server级别的xx_(srv|loc)_conf_t配置结构体</li>
+</ul>
+<p>对于每一个location{}而言，每个HTTP模块可以实现模块上下文<code>ngx_http_module_t</code>的merge_loc_conf回调方法, 如果实现, 则:</p>
+<ul>
+<li>调用merge_loc_conf方法，最终确定并保存各个HTTP模块在location级别的xx_loc_conf_t配置结构体</li>
+</ul>
+<h3 id="构造location组成的静态二叉平衡查找树">构造location组成的静态二叉平衡查找树</h3>
+<p>对于每一个server而言，</p>
+<ul>
+<li>将ngx_http_core_loc_conf_t组成的双向链表按照location匹配字符串进行排序</li>
+<li>根据已经排序过的的双向链表，构建静态的二叉查找树。这样处理请求时可以加速找到location</li>
+</ul>
+<h3 id="初始化可添加处理方法的http阶段的动态数组">初始化可添加处理方法的HTTP阶段的动态数组</h3>
+<ul>
+<li>http请求处理的11个阶段，分配数组，用于后续添加模块自定义的handler方法</li>
+</ul>
+<h3 id="调用所有http模块的postconfiguration方法使之可以介入http阶段">调用所有HTTP模块的postconfiguration方法使之可以介入HTTP阶段</h3>
+<p>每个HTTP模块可以实现模块上下文<code>ngx_http_module_t</code>的<code>postconfiguration</code>方法，如果实现，则：</p>
+<ul>
+<li>调用postconfiguration，将handler方法添加到上一步常见的某个阶段(哪个阶段由模块自行决定，但只有7个阶段可以介入)的数组中</li>
+</ul>
+<h3 id="根据各个http模块介入的处理方法构造出phase_engine_handlers数组">根据各个HTTP模块介入的处理方法构造出phase_engine_handlers数组</h3>
+<ul>
+<li>根据前两步构造的的动态数组，调用<code>ngx_http_init_phase_handlers</code>函数构造出phase_engine_handlers数组</li>
+<li>特别的，有四个阶段不允许介入或者介入无效，分别是：<code>NGX_HTTP_FIND_CONFIG_PHASE</code>、<br>
+<code>NGX_HTTP_POST_REWRITE_PHASE</code>、<code>NGX_HTTP_POST_ACCESS_PHASE</code>、<br>
+<code>NGX_HTTP_PRECONTENT_PHASE</code>(旧的Nginx的try_files阶段)</li>
+<li>特别的，<code>NGX_HTTP_CONTENT_PHASE</code>阶段，除了常规的postconfiguration介入方式(这种方式影响所有的location)。另外可以直接以ngx_command_t指定location的handler方式介入，只对location有该指令的location生效</li>
+<li>特别的,  记录http日志（最后一个阶段log）特殊处理，并不会出现在phase_engine_handlers数组中</li>
+</ul>
+<h3 id="构造server虚拟主机构成的支持通配符的散列表">构造server虚拟主机构成的支持通配符的散列表</h3>
+<ul>
+<li><code>ngx_http_server_names</code>将server虚拟主机和对应的ngx_http_core_srv_conf_t结构体指针哈希化关联起来，这样处理请求时可以快速匹配server</li>
+</ul>
+<h3 id="构造监听端口与server间的关联关系并设置新连接事件的回调方法">构造监听端口与server间的关联关系，并设置新连接事件的回调方法</h3>
+<ul>
+<li>将监听端口<code>ngx_http_conf_port_t</code>和addr地址<code>ngx_http_conf_addr_t</code>关联</li>
+<li>进一步，将<code>ngx_http_conf_addr_t</code>和server虚拟主机关联。该结构体有3个哈希表结构字段，<br>
+分别用于索引完全匹配的sever_name、通配符前置、通配符后置的server虚拟主机结构体<code>ngx_http_core_srv_conf_t</code>结构体指针</li>
+<li>设置新连接事件的回调方法: <code>ngx_http_init_connection</code></li>
+</ul>
+<h2 id="http请求的11个阶段">http请求的11个阶段</h2>
+<h3 id="构造phase_engine_handlers数组">构造phase_engine_handlers数组</h3>
+<ul>
+<li>ngx_http_init_phase_handlers函数在http初始化时调用</li>
+</ul>
+<pre><code>//根据各个HTTP模块介入的处理方法构造出phase_engine_handlers数组
+static ngx_int_t
+ngx_http_init_phase_handlers(ngx_conf_t *cf, ngx_http_core_main_conf_t *cmcf)
+{
+    ngx_int_t                   j;
+    ngx_uint_t                  i, n;
+    ngx_uint_t                  find_config_index, use_rewrite, use_access;
+    ngx_http_handler_pt        *h;
+    ngx_http_phase_handler_t   *ph;
+    ngx_http_phase_handler_pt   checker;
+
+    cmcf-&gt;phase_engine.server_rewrite_index = (ngx_uint_t) -1;
+    cmcf-&gt;phase_engine.location_rewrite_index = (ngx_uint_t) -1;
+    find_config_index = 0;
+    use_rewrite = cmcf-&gt;phases[NGX_HTTP_REWRITE_PHASE].handlers.nelts ? 1 : 0;
+    use_access = cmcf-&gt;phases[NGX_HTTP_ACCESS_PHASE].handlers.nelts ? 1 : 0;
+
+    n = 1                  /* find config phase */
+        + use_rewrite      /* post rewrite phase */
+        + use_access;      /* post access phase */
+
+    for (i = 0; i &lt; NGX_HTTP_LOG_PHASE; i++) { //注意:不包含NGX_HTTP_LOG_PHASE阶段,该阶段另行特殊处理
+        n += cmcf-&gt;phases[i].handlers.nelts; //累加计算总的HTTP阶段处理方法个数
+    }
+
+    ph = ngx_pcalloc(cf-&gt;pool,
+                     n * sizeof(ngx_http_phase_handler_t) + sizeof(void *));
+    if (ph == NULL) {
+        return NGX_ERROR;
+    }
+
+    cmcf-&gt;phase_engine.handlers = ph;
+    n = 0;
+
+    for (i = 0; i &lt; NGX_HTTP_LOG_PHASE; i++) { //注意: 不包含NGX_HTTP_LOG_PHASE阶段
+        h = cmcf-&gt;phases[i].handlers.elts;
+
+        switch (i) {
+
+        case NGX_HTTP_SERVER_REWRITE_PHASE:
+            if (cmcf-&gt;phase_engine.server_rewrite_index == (ngx_uint_t) -1) {
+                cmcf-&gt;phase_engine.server_rewrite_index = n;
+            }
+            checker = ngx_http_core_rewrite_phase;
+
+            break;
+
+        case NGX_HTTP_FIND_CONFIG_PHASE:
+            find_config_index = n;
+
+            ph-&gt;checker = ngx_http_core_find_config_phase;
+            n++;
+            ph++;
+
+            continue;
+
+        case NGX_HTTP_REWRITE_PHASE:
+            if (cmcf-&gt;phase_engine.location_rewrite_index == (ngx_uint_t) -1) {
+                cmcf-&gt;phase_engine.location_rewrite_index = n;
+            }
+            checker = ngx_http_core_rewrite_phase;
+
+            break;
+
+        case NGX_HTTP_POST_REWRITE_PHASE:
+            if (use_rewrite) {
+                ph-&gt;checker = ngx_http_core_post_rewrite_phase;
+                ph-&gt;next = find_config_index;
+                n++;
+                ph++;
+            }
+
+            continue;
+
+        case NGX_HTTP_ACCESS_PHASE:
+            checker = ngx_http_core_access_phase;
+            n++;
+            break;
+
+        case NGX_HTTP_POST_ACCESS_PHASE:
+            if (use_access) {
+                ph-&gt;checker = ngx_http_core_post_access_phase;
+                ph-&gt;next = n;
+                ph++;
+            }
+
+            continue;
+
+        case NGX_HTTP_CONTENT_PHASE:
+            checker = ngx_http_core_content_phase;
+            break;
+
+        default: //NGX_HTTP_POST_READ_PHASE、NGX_HTTP_PREACCESS_PHASE、NGX_HTTP_PRECONTENT_PHASE
+            checker = ngx_http_core_generic_phase;
+        }
+
+        n += cmcf-&gt;phases[i].handlers.nelts; //跳过本阶段的所有handler, 也即下一阶段的首个handler
+
+        //注意:每个HTTP处理阶段中最后加入到handlers[]中的会首先添加到cmcf-&gt;phase_engine.handlers
+        for (j = cmcf-&gt;phases[i].handlers.nelts - 1; j &gt;= 0; j--) {
+            ph-&gt;checker = checker;
+            ph-&gt;handler = h[j];
+            ph-&gt;next = n; //下一阶段的首个handler序号
+            ph++;
+        }
+    }
+
+    return NGX_OK;
+}
+</code></pre>
+<h3 id="checker方法">checker方法</h3>
+<h4 id="ngx_http_core_generic_phase">ngx_http_core_generic_phase</h4>
+<pre><code>/*
+ * NGX_HTTP_(POST_READ | PREACCESS | PRECONTENT)_PHASE等阶段的checker方法
+ */
+ngx_int_t
+ngx_http_core_generic_phase(ngx_http_request_t *r, ngx_http_phase_handler_t *ph)
+{
+    ngx_int_t  rc;
+
+    /*
+     * generic phase checker,
+     * used by the post read and pre-access phases
+     */
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;generic phase: %ui&quot;, r-&gt;phase_handler);
+
+    //调用HTTP模块添加的handler处理方法(由各个HTTP模块的postconfiguration钩子函数添加)
+    rc = ph-&gt;handler(r);
+
+    if (rc == NGX_OK) {
+        r-&gt;phase_handler = ph-&gt;next; //rc为NGX_OK时，进入下一阶段就行处理, 当前阶段即使有其他处理方法也会跳过
+        return NGX_AGAIN;
+    }
+
+    if (rc == NGX_DECLINED) {
+        r-&gt;phase_handler++; //下一个处理方法，可能仍是当前阶段，也有可能是下一个阶段的首个处理方法
+        return NGX_AGAIN;
+    }
+
+    if (rc == NGX_AGAIN || rc == NGX_DONE) {
+        return NGX_OK; //不更改r-&gt;phase_handler的值，当前处理方法有机会再次被调用。但是必须把控制权交还event模块
+    }
+
+    /* rc == NGX_ERROR || rc == NGX_HTTP_...  */
+
+    ngx_http_finalize_request(r, rc); //返回错误NGX_ERROR或者NGX_HTTP_开头的返回码，则结束请求
+
+    return NGX_OK;
+}
+</code></pre>
+<h4 id="ngx_http_core_rewrite_phase">ngx_http_core_rewrite_phase</h4>
+<pre><code>/*
+ * NGX_HTTP_(SERVER_REWRITE | REWRITE)_PHASE等阶段的checker方法
+ */
+ngx_int_t
+ngx_http_core_rewrite_phase(ngx_http_request_t *r, ngx_http_phase_handler_t *ph)
+{
+    ngx_int_t  rc;
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;rewrite phase: %ui&quot;, r-&gt;phase_handler);
+
+    rc = ph-&gt;handler(r); //执行挂载的handler方法
+
+    if (rc == NGX_DECLINED) {
+        r-&gt;phase_handler++; //当前处理方法执行完毕，执行下一个处理方法
+        return NGX_AGAIN;
+    }
+
+    if (rc == NGX_DONE) {
+        return NGX_OK; //不更改r-&gt;phase_handler的值，当前处理方法有机会再次被调用。但是必须把控制权交还event模块
+    }
+
+    /* NGX_OK, NGX_AGAIN, NGX_ERROR, NGX_HTTP_...  */
+
+    ngx_http_finalize_request(r, rc); //结束请求
+
+    return NGX_OK;
+}
+</code></pre>
+<h4 id="ngx_http_core_find_config_phase">ngx_http_core_find_config_phase</h4>
+<pre><code>/*
+ * 根据请求的URI寻找匹配的location表达式，不允许用户模块介入。即使介入也无效，因为入参ph未使用
+ */
+ngx_int_t
+ngx_http_core_find_config_phase(ngx_http_request_t *r,
+    ngx_http_phase_handler_t *ph)
+{
+    u_char                    *p;
+    size_t                     len;
+    ngx_int_t                  rc;
+    ngx_http_core_loc_conf_t  *clcf;
+
+    r-&gt;content_handler = NULL;
+    r-&gt;uri_changed = 0;
+
+    rc = ngx_http_core_find_location(r);
+
+    if (rc == NGX_ERROR) {
+        ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
+        return NGX_OK;
+    }
+
+    clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
+
+    if (!r-&gt;internal &amp;&amp; clcf-&gt;internal) {
+        ngx_http_finalize_request(r, NGX_HTTP_NOT_FOUND);
+        return NGX_OK;
+    }
+
+    ngx_log_debug2(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;using configuration \&quot;%s%V\&quot;&quot;,
+                   (clcf-&gt;noname ? &quot;*&quot; : (clcf-&gt;exact_match ? &quot;=&quot; : &quot;&quot;)),
+                   &amp;clcf-&gt;name);
+
+    ngx_http_update_location_config(r);
+
+    ngx_log_debug2(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;http cl:%O max:%O&quot;,
+                   r-&gt;headers_in.content_length_n, clcf-&gt;client_max_body_size);
+
+    if (r-&gt;headers_in.content_length_n != -1
+        &amp;&amp; !r-&gt;discard_body
+        &amp;&amp; clcf-&gt;client_max_body_size
+        &amp;&amp; clcf-&gt;client_max_body_size &lt; r-&gt;headers_in.content_length_n)
+    {
+        ngx_log_error(NGX_LOG_ERR, r-&gt;connection-&gt;log, 0,
+                      &quot;client intended to send too large body: %O bytes&quot;,
+                      r-&gt;headers_in.content_length_n);
+
+        r-&gt;expect_tested = 1;
+        (void) ngx_http_discard_request_body(r);
+        ngx_http_finalize_request(r, NGX_HTTP_REQUEST_ENTITY_TOO_LARGE);
+        return NGX_OK;
+    }
+
+    if (rc == NGX_DONE) {
+        ngx_http_clear_location(r);
+
+        r-&gt;headers_out.location = ngx_list_push(&amp;r-&gt;headers_out.headers);
+        if (r-&gt;headers_out.location == NULL) {
+            ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
+            return NGX_OK;
+        }
+
+        r-&gt;headers_out.location-&gt;hash = 1;
+        ngx_str_set(&amp;r-&gt;headers_out.location-&gt;key, &quot;Location&quot;);
+
+        if (r-&gt;args.len == 0) {
+            r-&gt;headers_out.location-&gt;value = clcf-&gt;name;
+
+        } else {
+            len = clcf-&gt;name.len + 1 + r-&gt;args.len;
+            p = ngx_pnalloc(r-&gt;pool, len);
+
+            if (p == NULL) {
+                ngx_http_clear_location(r);
+                ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
+                return NGX_OK;
+            }
+
+            r-&gt;headers_out.location-&gt;value.len = len;
+            r-&gt;headers_out.location-&gt;value.data = p;
+
+            p = ngx_cpymem(p, clcf-&gt;name.data, clcf-&gt;name.len);
+            *p++ = '?';
+            ngx_memcpy(p, r-&gt;args.data, r-&gt;args.len);
+        }
+
+        ngx_http_finalize_request(r, NGX_HTTP_MOVED_PERMANENTLY);
+        return NGX_OK;
+    }
+
+    r-&gt;phase_handler++; //下一阶段
+    return NGX_AGAIN;
+}
+</code></pre>
+<h4 id="ngx_http_core_post_rewrite_phase">ngx_http_core_post_rewrite_phase</h4>
+<pre><code>/*
+ * NGX_HTTP_POST_REWRITE_PHASE阶段的checker方法
+ */
+ngx_int_t
+ngx_http_core_post_rewrite_phase(ngx_http_request_t *r,
+    ngx_http_phase_handler_t *ph)
+{
+    ngx_http_core_srv_conf_t  *cscf;
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;post rewrite phase: %ui&quot;, r-&gt;phase_handler);
+
+    if (!r-&gt;uri_changed) {
+        r-&gt;phase_handler++;
+        return NGX_AGAIN;
+    }
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;uri changes: %d&quot;, r-&gt;uri_changes);
+
+    /*
+     * gcc before 3.3 compiles the broken code for
+     *     if (r-&gt;uri_changes-- == 0)
+     * if the r-&gt;uri_changes is defined as
+     *     unsigned  uri_changes:4
+     */
+
+    r-&gt;uri_changes--;
+
+    if (r-&gt;uri_changes == 0) { //url改写次数超限，结束请求
+        ngx_log_error(NGX_LOG_ERR, r-&gt;connection-&gt;log, 0,
+                      &quot;rewrite or internal redirection cycle &quot;
+                      &quot;while processing \&quot;%V\&quot;&quot;, &amp;r-&gt;uri);
+
+        ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
+        return NGX_OK;
+    }
+
+    r-&gt;phase_handler = ph-&gt;next;
+
+    cscf = ngx_http_get_module_srv_conf(r, ngx_http_core_module);
+    r-&gt;loc_conf = cscf-&gt;ctx-&gt;loc_conf;
+
+    return NGX_AGAIN;
+}
+</code></pre>
+<h4 id="ngx_http_core_access_phase">ngx_http_core_access_phase</h4>
+<pre><code>/*
+ * NGX_HTTP_ACCESS_PHASE阶段的checker方法
+ */
+ngx_int_t
+ngx_http_core_access_phase(ngx_http_request_t *r, ngx_http_phase_handler_t *ph)
+{
+    ngx_int_t                  rc;
+    ngx_http_core_loc_conf_t  *clcf;
+
+    if (r != r-&gt;main) { //子请求
+        r-&gt;phase_handler = ph-&gt;next; //跳到下一个阶段
+        return NGX_AGAIN;
+    }
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;access phase: %ui&quot;, r-&gt;phase_handler);
+
+    rc = ph-&gt;handler(r); //执行模块挂载的handler方法
+
+    if (rc == NGX_DECLINED) {
+        r-&gt;phase_handler++; //下一个处理方法
+        return NGX_AGAIN;
+    }
+
+    if (rc == NGX_AGAIN || rc == NGX_DONE) {
+        return NGX_OK; //不更改r-&gt;phase_handler的值，当前处理方法有机会再次被调用。但是必须把控制权交还event模块
+    }
+
+    clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
+
+    if (clcf-&gt;satisfy == NGX_HTTP_SATISFY_ALL) {
+
+        if (rc == NGX_OK) {
+            r-&gt;phase_handler++; //satisfy all, 则执行下一个handler方法
+            return NGX_AGAIN;
+        }
+
+    } else { //satisfy any
+        if (rc == NGX_OK) {
+            r-&gt;access_code = 0;
+
+            if (r-&gt;headers_out.www_authenticate) {
+                r-&gt;headers_out.www_authenticate-&gt;hash = 0;
+            }
+
+            r-&gt;phase_handler = ph-&gt;next; //satisfy any, 则跳到下一个阶段
+            return NGX_AGAIN;
+        }
+
+        if (rc == NGX_HTTP_FORBIDDEN || rc == NGX_HTTP_UNAUTHORIZED) {
+            if (r-&gt;access_code != NGX_HTTP_UNAUTHORIZED) {
+                r-&gt;access_code = rc;
+            }
+
+            r-&gt;phase_handler++; //下一个handler方法
+            return NGX_AGAIN;
+        }
+    }
+
+    /* rc == NGX_ERROR || rc == NGX_HTTP_...  */
+
+    ngx_http_finalize_request(r, rc); //结束请求
+    return NGX_OK;
+}
+</code></pre>
+<h4 id="ngx_http_core_post_access_phase">ngx_http_core_post_access_phase</h4>
+<pre><code>/*
+ * NGX_HTTP_POST_ACCESS_PHASE阶段的checker方法, 入参ph未使用，即不允许介入
+ */
+ngx_int_t
+ngx_http_core_post_access_phase(ngx_http_request_t *r,
+    ngx_http_phase_handler_t *ph)
+{
+    ngx_int_t  access_code;
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;post access phase: %ui&quot;, r-&gt;phase_handler);
+
+    access_code = r-&gt;access_code;
+
+    if (access_code) { //access_code非0，表明没有访问权限
+        if (access_code == NGX_HTTP_FORBIDDEN) {
+            ngx_log_error(NGX_LOG_ERR, r-&gt;connection-&gt;log, 0,
+                          &quot;access forbidden by rule&quot;);
+        }
+
+        r-&gt;access_code = 0;
+        ngx_http_finalize_request(r, access_code);
+        return NGX_OK;
+    }
+
+    r-&gt;phase_handler++;
+    return NGX_AGAIN;
+}
+</code></pre>
+<h4 id="ngx_http_core_content_phase">ngx_http_core_content_phase</h4>
+<pre><code>/*
+ * NGX_HTTP_CONTENT_PHASE阶段的checker方法
+ */
+ngx_int_t
+ngx_http_core_content_phase(ngx_http_request_t *r,
+    ngx_http_phase_handler_t *ph)
+{
+    size_t     root;
+    ngx_int_t  rc;
+    ngx_str_t  path;
+
+    if (r-&gt;content_handler) { //介入的特殊方式: 某location特有的handler方法, 不影响其他location
+        r-&gt;write_event_handler = ngx_http_request_empty_handler;
+        ngx_http_finalize_request(r, r-&gt;content_handler(r));
+        return NGX_OK;
+    }
+
+    ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r-&gt;connection-&gt;log, 0,
+                   &quot;content phase: %ui&quot;, r-&gt;phase_handler);
+
+    rc = ph-&gt;handler(r); //执行postconfiguration钩子函数添加的handler方法
+
+    if (rc != NGX_DECLINED) {
+        ngx_http_finalize_request(r, rc);
+        return NGX_OK;
+    }
+
+    /* rc == NGX_DECLINED */
+
+    ph++;
+
+    if (ph-&gt;checker) {
+        r-&gt;phase_handler++; //下一个handler方法
+        return NGX_AGAIN;
+    }
+
+    /* no content handler was found */
+
+    if (r-&gt;uri.data[r-&gt;uri.len - 1] == '/') {
+
+        if (ngx_http_map_uri_to_path(r, &amp;path, &amp;root, 0) != NULL) {
+            ngx_log_error(NGX_LOG_ERR, r-&gt;connection-&gt;log, 0,
+                          &quot;directory index of \&quot;%s\&quot; is forbidden&quot;, path.data);
+        }
+
+        ngx_http_finalize_request(r, NGX_HTTP_FORBIDDEN);
+        return NGX_OK;
+    }
+
+    ngx_log_error(NGX_LOG_ERR, r-&gt;connection-&gt;log, 0, &quot;no handler found&quot;);
+
+    ngx_http_finalize_request(r, NGX_HTTP_NOT_FOUND); //404
+    return NGX_OK;
+}
+</code></pre>
+<h3 id="处理请求经过10个阶段">处理请求经过10个阶段</h3>
+<pre><code>/*
+ * 10个阶段处理HTTP请求
+ */
+void
+ngx_http_core_run_phases(ngx_http_request_t *r)
+{
+    ngx_int_t                   rc;
+    ngx_http_phase_handler_t   *ph;
+    ngx_http_core_main_conf_t  *cmcf;
+
+    cmcf = ngx_http_get_module_main_conf(r, ngx_http_core_module);
+
+    ph = cmcf-&gt;phase_engine.handlers;
+
+    while (ph[r-&gt;phase_handler].checker) {
+
+        rc = ph[r-&gt;phase_handler].checker(r, &amp;ph[r-&gt;phase_handler]);
+
+        if (rc == NGX_OK) {
+            return;
+        }
+    }
+}
+</code></pre>
+<h3 id="记录http日志阶段特殊处理">记录http日志阶段特殊处理</h3>
+<pre><code>/*
+ * 记录访问日志。log阶段的handler链并不是在ngx_http_core_run_phases函数中执行, 它只需在请求处理逻辑结束后才执行一次
+ */
+static void
+ngx_http_log_request(ngx_http_request_t *r)
+{
+    ngx_uint_t                  i, n;
+    ngx_http_handler_pt        *log_handler;
+    ngx_http_core_main_conf_t  *cmcf;
+
+    cmcf = ngx_http_get_module_main_conf(r, ngx_http_core_module);
+
+    log_handler = cmcf-&gt;phases[NGX_HTTP_LOG_PHASE].handlers.elts;
+    n = cmcf-&gt;phases[NGX_HTTP_LOG_PHASE].handlers.nelts;
+
+    for (i = 0; i &lt; n; i++) {
+        log_handler[i](r);
+    }
+}
+</code></pre>
+
+            </div>
+            <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      yy的小站
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/" title="Nginx源码分析之--http框架">https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://xly0713.github.io/tag/ZUZBgmRmp/"># Nginx</a>
+    
+      <a href="https://xly0713.github.io/tag/1FH1KPhrG/"># 源码分析</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
       
+    </div>
+    <div class="nav-next">
       
-      
-      
-      
-      
-      
-      
-      
-      <a href="https://xly0713.github.io/post/nginx-yuan-ma-xue-xi/">
-        <div class="motion-warpper">
-          <div class="tag-post-node">
-            <h1>
-              04-11
-              <small>Nginx源码分析之--内存池</small>
-            </h1>
-          </div>
-        </div>
-      </a>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+        <a class="nav-pc-next" title="zsh替代bash" href="https://xly0713.github.io/post/zsh-ti-dai-bash/">zsh替代bash</a>
+        <a class="nav-mobile-next" title="zsh替代bash" href="https://xly0713.github.io/post/zsh-ti-dai-bash/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>
 </div>
-          </section>
+            
+  
+    
+      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '52d02c95d4f1500d9f75',
+    clientSecret: '878436bbe0814eb17153aae1f385fe271ceff250',
+    repo: 'xly0713.github.io',
+    owner: 'xly0713',
+    admin: ['xly0713'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+    
+    
+  
+
+          </div>
         </div>
       </div>
     </div>
@@ -510,6 +1683,36 @@ var apiKey = landlord.dataset.key;
   // 代码高亮
   hljs.initHighlightingOnLoad();
 
+</script>
+    <div class="light-box" id="light_box"></div>
+<script>
+  let imgs = document.querySelectorAll('.post-body img');
+  let lightBox = document.querySelector('#light_box');
+  lightBox.addEventListener('mousedown', (e) => {
+    e.preventDefault()
+  })
+  lightBox.addEventListener('mousewheel', (e) => {
+    e.preventDefault()
+  })
+  let width = window.innerWidth * 0.8;
+  lightBox.onclick = () => {
+    let img = lightBox.querySelector('img');
+    lightBox.style = '';
+    img && img.remove();
+  }
+  imgs.forEach(item => {
+    item.onclick = function (e) {
+      let lightImg = document.createElement('img');
+      lightImg.src = this.src;
+      lightBox.style = `height: 100%; opacity: 1; background-color: rgba(0, 0, 0, 0.5);cursor: zoom-out;`;
+      lightImg.style = `width: ${width}px; border: 1px solid #fff; border-radius: 2px;`;
+      lightImg.onclick = function () {
+        lightBox.style = '';
+        this.remove();
+      }
+      lightBox.append(lightImg);
+    }
+  })
 </script>
   </div>
 </body>
@@ -2040,5 +3243,4 @@ ngx_pfree(ngx_pool_t *pool, void *p)
 </script> -->
 
 <!-- <script src="/media/js/mouse/peace.js"></script> -->
-
 </html>

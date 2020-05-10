@@ -2,13 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xly0713.github.io</id>
     <title>yy的小站</title>
-    <updated>2020-05-02T04:04:25.871Z</updated>
+    <updated>2020-05-10T11:43:22.487Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xly0713.github.io"/>
     <link rel="self" href="https://xly0713.github.io/atom.xml"/>
     <logo>https://xly0713.github.io/images/avatar.png</logo>
     <icon>https://xly0713.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, yy的小站</rights>
+    <entry>
+        <title type="html"><![CDATA[Nginx源码分析之--http框架]]></title>
+        <id>https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/</id>
+        <link href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">
+        </link>
+        <updated>2020-05-10T03:33:32.000Z</updated>
+        <summary type="html"><![CDATA[<p>Nginx的http功能和模块使用广泛，那么Nginx的http框架是如何初始化的呢？http请求的11个处理阶段又是怎么设计的呢？</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Nginx的http功能和模块使用广泛，那么Nginx的http框架是如何初始化的呢？http请求的11个处理阶段又是怎么设计的呢？</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[zsh替代bash]]></title>
         <id>https://xly0713.github.io/post/zsh-ti-dai-bash/</id>
