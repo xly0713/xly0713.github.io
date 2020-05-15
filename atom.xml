@@ -2,13 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xly0713.github.io</id>
     <title>yz的小站</title>
-    <updated>2020-05-10T14:50:49.561Z</updated>
+    <updated>2020-05-15T13:11:00.116Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xly0713.github.io"/>
     <link rel="self" href="https://xly0713.github.io/atom.xml"/>
     <logo>https://xly0713.github.io/images/avatar.png</logo>
     <icon>https://xly0713.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, yz的小站</rights>
+    <entry>
+        <title type="html"><![CDATA[epoll事件驱动]]></title>
+        <id>https://xly0713.github.io/post/epoll-shi-jian-qu-dong/</id>
+        <link href="https://xly0713.github.io/post/epoll-shi-jian-qu-dong/">
+        </link>
+        <updated>2020-05-12T12:57:22.000Z</updated>
+        <summary type="html"><![CDATA[<p>当前Linux系统下，Nginx会默认使用epoll作为事件驱动机制。本文对epoll做个简单介绍。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>当前Linux系统下，Nginx会默认使用epoll作为事件驱动机制。本文对epoll做个简单介绍。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Nginx源码分析之--http框架]]></title>
         <id>https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/</id>

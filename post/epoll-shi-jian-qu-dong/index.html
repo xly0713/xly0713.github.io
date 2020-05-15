@@ -8,7 +8,7 @@
 <meta name="keywords" content="Nginx 网络协议 源码分析 DNS 云计算">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>关于 | yz的小站</title>
+<title>epoll事件驱动 | yz的小站</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1589548255337">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/gemini.css">
@@ -49,7 +49,7 @@
   })();
 </script>
 
-  <meta name="description" content="关于" />
+  <meta name="description" content="epoll事件驱动" />
   <meta name="keywords" content="" />
 </head>
 
@@ -242,9 +242,21 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8">事件驱动</a></li>
+<li><a href="#epoll-api%E4%BB%8B%E7%BB%8D">epoll API介绍</a>
+<ul>
+<li><a href="#epoll_create">epoll_create</a></li>
+<li><a href="#epoll_ctl">epoll_ctl</a></li>
+<li><a href="#epoll_wait">epoll_wait</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91%E5%92%8C%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91">水平触发和边缘触发</a>
+<ul>
+<li><a href="#%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91">水平触发</a></li>
+<li><a href="#%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91">边缘触发</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B">代码示例</a></li>
 </ul>
 </li>
 </ul>
@@ -512,8 +524,8 @@
           <div class="section bg-color post post-page">
             <header class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://xly0713.github.io/post/about/">
-      关于
+    <a class="post-title-link" href="https://xly0713.github.io/post/epoll-shi-jian-qu-dong/">
+      epoll事件驱动
     </a>
   </h1>
   <div class="post-meta">
@@ -521,34 +533,214 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span>发布于</span>
-      <span>2019-01-25</span>
+      <span>2020-05-12</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>1分钟</span>
+      <span>6分钟</span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>105<span class="pc-show">字数</span></span>
+      <span>1257<span class="pc-show">字数</span></span>
     </span>
     
   </div>
 </header>
             <div class="post-body next-md-body" id="post_body">
-              <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本站主要用来记录一些技术，帮助自己整理零碎的知识，希望对他人有所帮助。欢迎<a href="/atom.xml">RSS</a>订阅本站。</p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<p>博主是一名后台研发攻城狮，关注云计算相关领域，目前专注于CDN技术和直播技术。</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <p>当前Linux系统下，Nginx会默认使用epoll作为事件驱动机制。本文对epoll做个简单介绍。</p>
+<!-- more -->
+<h2 id="事件驱动">事件驱动</h2>
+<p>事件驱动又称作IO多路复用，epoll是Linux内核实现一种IO多路复用机制</p>
 <ul>
-<li>邮件: xly880713@gmail.com</li>
+<li>IO： 在Linux系统下，一切皆文件。文件可读/可写即称作IO，比如：普通文件、socket套接字、进程之间通信的管道pipe，都是可以IO的对象。Linux系统统一用文件描述符fd表示。</li>
+<li>事件：
+<ul>
+<li>可读事件：当fd关联的内核读缓冲区可读时，则触发可读事件 （可写：内核缓冲区非空）</li>
+<li>可写事件：当fd关联的内科写缓冲区可写时，则触发可写事件   (可读：内核缓冲区不满)</li>
 </ul>
+</li>
+<li>事件通知方式
+<ul>
+<li>主动通知：仅当有fd有事件发生时，内核主动通知上层应用有事件发生的fd集合</li>
+<li>被动通知：上层应用向内核轮询检查fd集合中的fd是否有事件发生</li>
+</ul>
+</li>
+</ul>
+<h2 id="epoll-api介绍">epoll API介绍</h2>
+<figure data-type="image" tabindex="1"><img src="https://xly0713.github.io/post-images/1589288969778.png" alt="" loading="lazy"></figure>
+<h3 id="epoll_create">epoll_create</h3>
+<ul>
+<li>原型：int epoll_create(int size)
+<ul>
+<li>功能：创建一个epoll实例，内核会返回一个表示epoll实例的fd</li>
+<li>入参
+<ul>
+<li>size: 原本表示所要监视fd的最多个数。现在Linux版中无意义，只要传值大于0的整数即可</li>
+</ul>
+</li>
+<li>返回值: epoll实例的fd</li>
+<li>说明：调用该API，内核会产生一个epoll实例数据结构，然后返回一个文件描述符</li>
+</ul>
+</li>
+</ul>
+<h3 id="epoll_ctl">epoll_ctl</h3>
+<ul>
+<li>原型: int epoll_ctl(int epfd， int op， int fd， struct epoll_event *event)
+<ul>
+<li>功能：添加/删除/修改要监听的事件</li>
+<li>入参
+<ul>
+<li>epfd: 即epoll_create创建的epoll实例描述符</li>
+<li>op: 添加、删除或修改
+<ul>
+<li>EPOLL_CTL_ADD: 添加一个需要监视的fd</li>
+<li>EPOLL_CTL_DEL: 删除一个fd</li>
+<li>EPOLL_CTL_MOD: 修改一个fd</li>
+</ul>
+</li>
+<li>fd: IO对象描述符</li>
+<li>event结构体<pre><code>struct epoll_event {
+    __uint32_t events;
+    epoll_data_t data;
+};
+</code></pre>
+<ul>
+<li>events字段：感兴趣的事件描述，可多选
+<ul>
+<li>EPOLLIN：fd处于可读状态</li>
+<li>EPOLLOUT：fd处于可写状态</li>
+<li>EPOLLET：通知模式为边缘触发模式，相对于水平触发模式而言</li>
+<li>EPOLLONESHOT：第一次进行通知，之后不再检测</li>
+<li>EPOLLHUP： 本端产生一个挂断事件，默认检测事件</li>
+<li>EPOLLDHUP：对端产生一个挂断事件</li>
+<li>EPOLLPRI：由带外数据触发</li>
+<li>EPOLLERR：产生错误时触发，默认检测事件</li>
+</ul>
+</li>
+<li>data字段：是一个union结构<pre><code>typedef union epoll_data {
+    void *ptr;
+    int fd;
+    __uint32_t u32;
+    __uint64_t u64;
+};
+</code></pre>
+<ul>
+<li>如果不需要额外的信息，只需简单的赋值: <code>epoll_data.fd = fd</code></li>
+<li>如果需要额外信息，则可以使用<code>void *ptr</code>, 这样epoll_wait返回时可以使用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值: 如果返回-1表示调用失败</li>
+</ul>
+</li>
+</ul>
+<h3 id="epoll_wait">epoll_wait</h3>
+<ul>
+<li>原型：int epoll_wait(int epfd， struct epoll_event *events， int maxevents， int timeout)
+<ul>
+<li>功能：阻塞等待已注册的事件发生，返回事件的数目，并将触发的事件写入events数组中</li>
+<li>入参：
+<ul>
+<li>epfd: 即epoll_create创建的epoll实例描述符</li>
+<li>events：用来记录被触发的事件数组，其大小应该和maxevents一致</li>
+<li>maxevents: 返回的events的最大个数</li>
+<li>timeout: 阻塞超时(以ms为单位)
+<ul>
+<li>如果传参-1， 则调用一直阻塞，直到有事件发生或捕获其他信号</li>
+<li>如果传参0，则非阻塞检测是否有事件发生，无论有事件还是没事件，调用立即返回</li>
+<li>如果传参大于0， 则最多等待timeout时间返回，如果等待期间有事件发生则立即返回</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="水平触发和边缘触发">水平触发和边缘触发</h2>
+<h3 id="水平触发">水平触发</h3>
+<ul>
+<li>只要缓冲区有数据，则返回可读事件</li>
+<li>只要缓冲区还不满，则返回可写事件</li>
+</ul>
+<h3 id="边缘触发">边缘触发</h3>
+<ul>
+<li>
+<p>可读事件</p>
+<ul>
+<li>当缓冲区数据为空变为非空时，则返回可读事件</li>
+<li>当缓冲区接收到新数据时，即缓冲区待读数据变多时，返回可读事件</li>
+<li>当缓冲区有数据可读，且应用进程对相应的描述符进行EPOLL_CTL_MOD 修改EPOLLIN事件时，返回可读事件</li>
+</ul>
+</li>
+<li>
+<p>可写事件</p>
+<ul>
+<li>当缓冲区由不可写变为可写时，则返回可写事件</li>
+<li>当有旧数据被发送走，即缓冲区中的内容变少的时候，返回可写事件</li>
+<li>当缓冲区有空间可写，且应用进程对相应的描述符进行EPOLL_CTL_MOD 修改EPOLLOUT事件时，返回可写事件</li>
+</ul>
+</li>
+</ul>
+<h2 id="代码示例">代码示例</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/epoll.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX_EVENTS 5
+#define READ_SIZE 10
+
+int main() {
+    int running = 1, event_count, i;
+    size_t bytes_read;
+    char read_buffer[READ_SIZE + 1];
+    struct epoll_event event, events[MAX_EVENTS];
+
+    int epoll_fd = epoll_create1(0);
+    if (epoll_fd == -1) {
+        fprintf(stderr, &quot;Failed to create epoll fd\n&quot;);
+        return 1;
+    }
+
+    event.events = EPOLLIN;
+    event.data.fd = 0;
+
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, 0, &amp;event) == -1) {
+        fprintf(stderr, &quot;Failed to add fd to epoll\n&quot;);
+        return 1;
+    }
+
+    while (running) {
+        printf(&quot;\nPolling for input...\n&quot;);
+        event_count = epoll_wait(epoll_fd, events, MAX_EVENTS, 30000);
+        printf(&quot;%d ready events\n&quot;, event_count);
+        for (i = 0; i &lt; event_count; i++) {
+            printf(&quot;Reading fd '%d' -- &quot;, events[i].data.fd);
+            bytes_read = read(events[i].data.fd, read_buffer, READ_SIZE);
+            printf(&quot;%zd bytes read.\n&quot;, bytes_read);
+            read_buffer[bytes_read] = '\0';
+            printf(&quot;Read '%s'\n&quot;, read_buffer);
+
+            if (!strncmp(read_buffer, &quot;stop\n&quot;, 5)) {
+                running = 0;
+            }
+        }
+    }
+
+    if (close(epoll_fd)) {
+        fprintf(stderr, &quot;Failed to close epoll fd\n&quot;);
+        return 1;
+    }
+
+    return 0;
+}
+</code></pre>
 
             </div>
             <div class="post-footer">
@@ -559,7 +751,7 @@
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://xly0713.github.io/post/about/" title="关于">https://xly0713.github.io/post/about/</a>
+      <a href="https://xly0713.github.io/post/epoll-shi-jian-qu-dong/" title="epoll事件驱动">https://xly0713.github.io/post/epoll-shi-jian-qu-dong/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -574,6 +766,10 @@
       
     </div>
     <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Nginx源码分析之--http框架" href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">Nginx源码分析之--http框架</a>
+        <a class="nav-mobile-next" title="Nginx源码分析之--http框架" href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>
