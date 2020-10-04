@@ -5,13 +5,13 @@
   <meta charset="UTF-8" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="keywords" content="Nginx 网络协议 源码分析 DNS 云计算">
+<meta name="keywords" content="Nginx 网络协议 DNS 云计算">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>yz的小站</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1591019012771">
+<title>yg的小站</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1601817694435">
 <link rel="stylesheet" href="/styles/main.css">
-<link rel="stylesheet" href="/media/css/gemini.css">
+<link rel="stylesheet" href="/media/css/mist.css">
 
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -55,9 +55,9 @@
   <div class="head-top-line"></div>
   <div class="header-box">
     
-<div class=" gemini">
-  <header class="header  ">
-    <div class="blog-header box-shadow-wrapper bg-color " id="header">
+<div class=" mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
       <div class="nav-toggle" id="nav_toggle">
         <div class="toggle-box">
           <div class="line line-top"></div>
@@ -68,13 +68,17 @@
       <div class="site-meta">       
         <div class="site-title">
           
-            <a href="/" class="brand">
-              <span>yz的小站</span>
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">yg的小站</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
             </a>  
           
         </div>
-        
-          <p class="subtitle">Keep Learning, Keep Sharing.</p>
         
       </div>
       <nav class="site-nav" id="site_nav">
@@ -156,14 +160,14 @@
   <div class="main-continer">
     
     <div
-      class="section-layout gemini ">
+      class="section-layout mist bg-color">
       <div class="section-layout-wrapper">
         <div id="sidebarMeta" class="sidebar">
     
-<div class="sidebar-wrapper box-shadow-wrapper bg-color">
+<div class="sidebar-wrapper box-shadow-wrapper ">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
-    <p class="site-author-name">yz的小站</p>
+    <p class="site-author-name">yg的小站</p>
     <p class="site-description right-motion">Day day up!</p>
   </div>
   <div class="sidebar-item side-item-stat right-motion">
@@ -188,15 +192,6 @@
     </div>
   </div>
   
-    
-      <div class="sidebar-item">
-        <span class="site-item-rss">
-            <i class="fa fa-rss"></i>
-            <a href="https://xly0713.github.io/atom.xml" target="_blank">RSS</a>
-        </span>
-      </div>
-    
-  
   
     <div class="sidebar-item sidebar-item-social">
       <div class="social-item">
@@ -219,7 +214,7 @@
 </div>
 <script>
   let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'gemini';
+  let scheme = 'mist';
   let sidebarWrapper = document.querySelector('.sidebar-wrapper');
   if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
     document.addEventListener('scroll', function(e) {
@@ -231,8 +226,8 @@
     });
   }
   </script>
-        <div class="section-box gemini">
-          <section class="section  posts-expand slide-down-in">
+        <div class="section-box mist">
+          <section class="section bg-color posts-expand slide-down-in">
             
   <article class="post-list-box  post box-shadow-wrapper">
     <div class="article-wrapper bg-color">
@@ -289,6 +284,10 @@
         </div>
         
       </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
       
     </div>
   </article>
@@ -355,6 +354,10 @@
         
       </div>
       
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
     </div>
   </article>
   
@@ -402,12 +405,14 @@
   </footer>
   
   
-  <div class="gemini back-to-top" id="back_to_top">
+    <div class="drawer-box left" id="drawer_box">
+      <span class="muse-line muse-line-first"></span>
+      <span class="muse-line muse-line-middle"></span>
+      <span class="muse-line muse-line-last"></span>
+    </div>
+  
+  <div class="mist back-to-top" id="back_to_top">
     <i class="fa fa-arrow-up"></i>
-    
-    <span class="scrollpercent">
-      <span id="back_to_top_text">0</span>%
-    </span>
     
   </div>
   
@@ -2433,6 +2438,8 @@ ngx_pfree(ngx_pool_t *pool, void *p)
   escapeMap.set('&quot;', '"');
   escapeMap.set('&amp;', '&');
 </script> -->
+
+<script src="/media/js/mouse/love.js"></script>
 
 <!-- <script src="/media/js/mouse/peace.js"></script> -->
 
