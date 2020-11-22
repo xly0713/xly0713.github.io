@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xly0713.github.io</id>
     <title>yg的小站</title>
-    <updated>2020-10-04T13:22:52.745Z</updated>
+    <updated>2020-11-22T06:58:49.131Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xly0713.github.io"/>
     <link rel="self" href="https://xly0713.github.io/atom.xml"/>
@@ -88,9 +88,9 @@
         <link href="https://xly0713.github.io/post/dns/">
         </link>
         <updated>2020-01-30T12:31:48.000Z</updated>
-        <summary type="html"><![CDATA[<p>本文是对DNS协议的简单整理介绍。</p>
+        <summary type="html"><![CDATA[<p>web冲浪，DNS是必不可少的协议。本文主要介绍DNS的工作机制，对DNS的某些信息(比如历史)不做介绍。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>本文是对DNS协议的简单整理介绍。</p>
+        <content type="html"><![CDATA[<p>web冲浪，DNS是必不可少的协议。本文主要介绍DNS的工作机制，对DNS的某些信息(比如历史)不做介绍。</p>
 ]]></content>
     </entry>
 </feed>
