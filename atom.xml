@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xly0713.github.io</id>
     <title>yg的小站</title>
-    <updated>2020-11-22T07:07:50.123Z</updated>
+    <updated>2020-11-22T07:10:53.276Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xly0713.github.io"/>
     <link rel="self" href="https://xly0713.github.io/atom.xml"/>
@@ -15,9 +15,11 @@
         <link href="https://xly0713.github.io/post/epoll-shi-jian-qu-dong/">
         </link>
         <updated>2020-05-12T12:57:22.000Z</updated>
-        <summary type="html"><![CDATA[<p>当前Linux系统下，Nginx会默认使用epoll作为事件驱动机制。本文对epoll做个简单介绍。</p>
+        <summary type="html"><![CDATA[<p>Linux系统下，Nginx会默认使用epoll作为事件驱动机制，使用epoll是Nginx性能高的一个重要原因。<br>
+本文对epoll工作机制稍作整理。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>当前Linux系统下，Nginx会默认使用epoll作为事件驱动机制。本文对epoll做个简单介绍。</p>
+        <content type="html"><![CDATA[<p>Linux系统下，Nginx会默认使用epoll作为事件驱动机制，使用epoll是Nginx性能高的一个重要原因。<br>
+本文对epoll工作机制稍作整理。</p>
 ]]></content>
     </entry>
     <entry>
