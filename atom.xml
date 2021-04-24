@@ -2,13 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://xly0713.github.io</id>
     <title>yg的小站</title>
-    <updated>2021-04-05T07:01:13.429Z</updated>
+    <updated>2021-04-24T09:05:12.073Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://xly0713.github.io"/>
     <link rel="self" href="https://xly0713.github.io/atom.xml"/>
     <logo>https://xly0713.github.io/images/avatar.png</logo>
     <icon>https://xly0713.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, yg的小站</rights>
+    <entry>
+        <title type="html"><![CDATA[Nginx源码分析之--网络IO]]></title>
+        <id>https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/</id>
+        <link href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/">
+        </link>
+        <updated>2021-04-24T06:49:11.000Z</updated>
+        <summary type="html"><![CDATA[<p>操作系统提供了recv, send等接口。网络IO时，Nginx源码是如何封装使用的呢？</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>操作系统提供了recv, send等接口。网络IO时，Nginx源码是如何封装使用的呢？</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Functional options in Go]]></title>
         <id>https://xly0713.github.io/post/functional-options-in-go/</id>
@@ -105,16 +116,5 @@
         <link href="https://xly0713.github.io/post/gperftools-fen-xi-nginx/">
         </link>
         <updated>2020-02-09T11:00:55.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[TCP协议基础]]></title>
-        <id>https://xly0713.github.io/post/tcp-xie-yi/</id>
-        <link href="https://xly0713.github.io/post/tcp-xie-yi/">
-        </link>
-        <updated>2020-02-02T12:41:15.000Z</updated>
-        <summary type="html"><![CDATA[<p>好记性不如烂笔头，本文是tcp协议部分基础知识的整理。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>好记性不如烂笔头，本文是tcp协议部分基础知识的整理。</p>
-]]></content>
     </entry>
 </feed>
