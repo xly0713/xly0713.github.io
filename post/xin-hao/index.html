@@ -8,7 +8,7 @@
 <meta name="keywords" content="Nginx 网络协议 DNS 云计算">
 <meta name="description" content="">
 <meta name="theme-color" content="#000">
-<title>yg的小站</title>
+<title>信号 | yg的小站</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1620575421211">
 <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet" href="/media/css/mist.css">
@@ -49,6 +49,8 @@
   })();
 </script>
 
+  <meta name="description" content="信号" />
+  <meta name="keywords" content="Nginx,Linux" />
 </head>
 
 <body>
@@ -162,8 +164,23 @@
     <div
       class="section-layout mist bg-color">
       <div class="section-layout-wrapper">
-        <div id="sidebarMeta" class="sidebar">
-    
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            
 <div class="sidebar-wrapper box-shadow-wrapper ">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -211,51 +228,241 @@
 
 
 </div>
+          
+        
+      </div>
+    </div>
+  
 </div>
 <script>
-  let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'mist';
-  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
-  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
-    document.addEventListener('scroll', function(e) {
-      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
-        sidebarWrapper.classList.add('home-sidebar-fixed')
-      } else {
-        sidebarWrapper.classList.remove('home-sidebar-fixed')
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    window.Velocity(hideElement, 'stop');
+    window.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        window.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
       }
-    });
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
   }
-  </script>
-        <div class="section-box mist box-shadow-wrapper">
-          <section class="friends-section bg-color slide-down-in">
-            <div class="firends-box">
-              <h1 class="firends-title" itemprop="name headline">友链</h1>
-              
-              
-              
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <header class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://xly0713.github.io/post/xin-hao/">
+      信号
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span>发布于</span>
+      <span>2021-05-09</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show">分类于</span>
+      
+      
+      <a href="https://xly0713.github.io/tag/ZUZBgmRmp/">
+        <span>Nginx</span>
+      </a>、
+      
+      
+      
+      <a href="https://xly0713.github.io/tag/xFfSPpftD/">
+        <span>Linux</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>3分钟</span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>717<span class="pc-show">字数</span></span>
+    </span>
+    
+  </div>
+</header>
+            <div class="post-body next-md-body" id="post_body">
+              <p>一、基本概念</p>
+<ul>
+<li>信号是软件中断，信号相对于进程控制流程来说是异步的</li>
+<li>kill -l命令可以查看系统定义的信号列表，每一个信号都有一个编号（不为0）和名称</li>
+<li>信号在用户程序不注册处理函数时，有默认的处理动作，比如：终止进程、coredump</li>
+</ul>
+<p>二、产生信号</p>
+<ul>
+<li>用户终端按键触发信号发送到前台进程，比如: Ctrl-C产生SIGINT中断信号，Ctrl-\产生SIGQUIT信号</li>
+<li>硬件异常产生信号，如：除0产生SIGFPE信号，非法内存访问产生SIGSEGV信号</li>
+<li>发送kill命令</li>
+<li>另一个进程调用kill函数发送信号</li>
+<li>内核检测到某种软件条件发生，比如：timer超时产生SIGALRM信号，向已关闭的管道写数据产生SIGPIPE信号</li>
+</ul>
+<p>三、阻塞信号</p>
+<ul>
+<li>信号在内核中的表示
+<ol>
+<li>pending: 信号是否处于未决状态，信号产生内核处理中断完成后，对应的信号pending被设置为1。如果block标记为0，则可以递送，否则需等待解除阻塞后递送</li>
+<li>block:  是(1)/否(0) 阻塞产生的信号递送。阻塞时，信号多次产生的话，常规信号仅计一次(标记pending为1)，实时信号排队处理</li>
+</ol>
+</li>
+<li>信号集操作函数
+<ol>
+<li>sigemptyset、sigfillset：初始化信号集 （前者将信号集中的所有bit位置0，后者则置1）</li>
+<li>sigaddset, sigdelset: 操作信号集添加或删除某信号 （对应的信号bit位置1或0）</li>
+<li>sigismember: 检查信号是否在信号集是否有效</li>
+<li>sigprocmask: 操作信号屏蔽字（即设置信号的block标记，如果为1则阻塞递送）</li>
+<li>sigpending: 获取进程的未决信号集（信号的pending为1）</li>
+<li>sigsuspend: 挂起当前进程，直到捕捉到一个信号</li>
+</ol>
+</li>
+</ul>
+<p>四、信号捕捉</p>
+<ul>
+<li>捕捉后处理
+<ol>
+<li>忽略SIG_IGN</li>
+<li>不忽略
+<ol>
+<li>执行系统默认SIG_DFL</li>
+<li>用户程序注册handler处理</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>注册信号处理函数的方式
+<ul>
+<li>signal: 使用sigaction函数替代</li>
+<li>sigaction
+<ul>
+<li>信号处理函数指针有两种，只能二选一 （sa_flags是否被标记SA_SIGINFO区分）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果用户程序注册信号处理函数，则信号递送后，表示捕捉信号成功，过程举例
+<ol>
+<li>用户程序注册了SIGINT信号的处理函数sighandler</li>
+<li>程序执行时任意时刻，收到SIGINT信号发生中断切换到内核态</li>
+<li>中断处理完毕，内核在返回用户态之前，发现SIGINT信号处于未决状态且未被阻塞递送，则返回用户态后执行信号处理函数sighandler</li>
+<li>信号处理函数sighandler执行完毕后，自动执行特殊的系统调用sigreturn再次进入内核态</li>
+<li>内核态检查没有新的信号可以递送，则返回用户态执行正常的业务流程</li>
+</ol>
+</li>
+</ul>
+
             </div>
-            <hr>
-            <div style="text-align:center">
-              <span class="with-love">
-                <i class="fa fa-heart"></i>
-              </span>
-              留言添加友链
-              <span class="with-love">
-                <i class="fa fa-heart"></i>
-              </span>
-            </div>
-            <hr>
-            <div class="friends-note">
-              <p><strong>友链格式：</strong></p>
-              <ul>
-                <li>网站名称：枫糖</li>
-                <li>网站地址：<a href="https://blog.maplesugar.space" data-pjax-state="">https://blog.maplesugar.space</a>
-                </li>
-                <li> 网站描述：From rookie to master</li>
-                <li> 网站 Logo / 头像：<a href="https://blog.maplesugar.space/uploads/maple-leaf-avatar.jpg"
-                    data-pjax-state="">https://blog.maplesugar.space/uploads/maple-leaf-avatar.jpg</a></li>
-              </ul>
-            </div>
+            <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      yg的小站
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://xly0713.github.io/post/xin-hao/" title="信号">https://xly0713.github.io/post/xin-hao/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://xly0713.github.io/tag/ZUZBgmRmp/"># Nginx</a>
+    
+      <a href="https://xly0713.github.io/tag/xFfSPpftD/"># Linux</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Nginx源码分析之--网络IO" href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/">Nginx源码分析之--网络IO</a>
+        <a class="nav-mobile-next" title="Nginx源码分析之--网络IO" href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
             
   
     
@@ -280,7 +487,7 @@
     
   
 
-          </section>
+          </div>
         </div>
       </div>
     </div>
@@ -452,6 +659,36 @@
   // 代码高亮
   hljs.initHighlightingOnLoad();
 
+</script>
+    <div class="light-box" id="light_box"></div>
+<script>
+  let imgs = document.querySelectorAll('.post-body img');
+  let lightBox = document.querySelector('#light_box');
+  lightBox.addEventListener('mousedown', (e) => {
+    e.preventDefault()
+  })
+  lightBox.addEventListener('mousewheel', (e) => {
+    e.preventDefault()
+  })
+  let width = window.innerWidth * 0.8;
+  lightBox.onclick = () => {
+    let img = lightBox.querySelector('img');
+    lightBox.style = '';
+    img && img.remove();
+  }
+  imgs.forEach(item => {
+    item.onclick = function (e) {
+      let lightImg = document.createElement('img');
+      lightImg.src = this.src;
+      lightBox.style = `height: 100%; opacity: 1; background-color: rgba(0, 0, 0, 0.5);cursor: zoom-out;`;
+      lightImg.style = `width: ${width}px; border: 1px solid #fff; border-radius: 2px;`;
+      lightImg.onclick = function () {
+        lightBox.style = '';
+        this.remove();
+      }
+      lightBox.append(lightImg);
+    }
+  })
 </script>
   </div>
 </body>
@@ -3180,5 +3417,4 @@ ngx_pfree(ngx_pool_t *pool, void *p)
 <script src="/media/js/mouse/love.js"></script>
 
 <!-- <script src="/media/js/mouse/peace.js"></script> -->
-
 </html>
