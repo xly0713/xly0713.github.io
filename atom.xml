@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://xly0713.github.io</id>
+    <id>http://localhost:4000</id>
     <title>yg的小站</title>
-    <updated>2021-05-10T12:57:49.631Z</updated>
+    <updated>2021-05-10T12:58:32.103Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://xly0713.github.io"/>
-    <link rel="self" href="https://xly0713.github.io/atom.xml"/>
-    <logo>https://xly0713.github.io/images/avatar.png</logo>
-    <icon>https://xly0713.github.io/favicon.ico</icon>
+    <link rel="alternate" href="http://localhost:4000"/>
+    <link rel="self" href="http://localhost:4000/atom.xml"/>
+    <logo>http://localhost:4000/images/avatar.png</logo>
+    <icon>http://localhost:4000/favicon.ico</icon>
     <rights>All rights reserved 2021, yg的小站</rights>
     <entry>
         <title type="html"><![CDATA[信号]]></title>
-        <id>https://xly0713.github.io/post/xin-hao/</id>
-        <link href="https://xly0713.github.io/post/xin-hao/">
+        <id>http://localhost:4000/post/xin-hao/</id>
+        <link href="http://localhost:4000/post/xin-hao/">
         </link>
         <updated>2021-05-09T15:47:19.000Z</updated>
         <summary type="html"><![CDATA[<p>Linux系统，信号提供了一种处理异步事件的方法。很多重要的程序都需要处理信号。本文略作梳理，更详细的知识可以参考APUE。</p>
@@ -22,8 +22,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Nginx源码分析之--网络IO]]></title>
-        <id>https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/</id>
-        <link href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/">
+        <id>http://localhost:4000/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/</id>
+        <link href="http://localhost:4000/post/nginx-yuan-ma-fen-xi-zhi-wang-luo-io-cao-zuo/">
         </link>
         <updated>2021-04-24T06:49:11.000Z</updated>
         <summary type="html"><![CDATA[<p>操作系统提供了recv, send等接口。网络IO时，Nginx源码是如何封装使用的呢？</p>
@@ -33,8 +33,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Functional options in Go]]></title>
-        <id>https://xly0713.github.io/post/functional-options-in-go/</id>
-        <link href="https://xly0713.github.io/post/functional-options-in-go/">
+        <id>http://localhost:4000/post/functional-options-in-go/</id>
+        <link href="http://localhost:4000/post/functional-options-in-go/">
         </link>
         <updated>2020-06-20T05:34:30.000Z</updated>
         <summary type="html"><![CDATA[<p>go语言编码使用functional options是常见用法，但是在hot path处要慎用。</p>
@@ -44,8 +44,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[defer的妙用]]></title>
-        <id>https://xly0713.github.io/post/defer-de-miao-yong/</id>
-        <link href="https://xly0713.github.io/post/defer-de-miao-yong/">
+        <id>http://localhost:4000/post/defer-de-miao-yong/</id>
+        <link href="http://localhost:4000/post/defer-de-miao-yong/">
         </link>
         <updated>2020-06-20T04:57:11.000Z</updated>
         <summary type="html"><![CDATA[<p>defer是go关键字，一般用来清理释放资源，在了解go-kit微服务时，发现了有意思的用法</p>
@@ -55,8 +55,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[RTMP协议整理]]></title>
-        <id>https://xly0713.github.io/post/rtmp-xie-yi/</id>
-        <link href="https://xly0713.github.io/post/rtmp-xie-yi/">
+        <id>http://localhost:4000/post/rtmp-xie-yi/</id>
+        <link href="http://localhost:4000/post/rtmp-xie-yi/">
         </link>
         <updated>2020-06-11T15:01:05.000Z</updated>
         <summary type="html"><![CDATA[<p>RTMP是直播业务使用的重要协议，整理以备查。</p>
@@ -66,8 +66,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[epoll事件驱动]]></title>
-        <id>https://xly0713.github.io/post/epoll-shi-jian-qu-dong/</id>
-        <link href="https://xly0713.github.io/post/epoll-shi-jian-qu-dong/">
+        <id>http://localhost:4000/post/epoll-shi-jian-qu-dong/</id>
+        <link href="http://localhost:4000/post/epoll-shi-jian-qu-dong/">
         </link>
         <updated>2020-05-12T12:57:22.000Z</updated>
         <summary type="html"><![CDATA[<p>Linux系统下，Nginx会默认使用epoll作为事件驱动机制，使用epoll是Nginx性能高的一个重要原因。<br>
@@ -79,8 +79,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Nginx源码分析之--http框架]]></title>
-        <id>https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/</id>
-        <link href="https://xly0713.github.io/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">
+        <id>http://localhost:4000/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/</id>
+        <link href="http://localhost:4000/post/nginx-yuan-ma-fen-xi-zhi-http-kuang-jia/">
         </link>
         <updated>2020-05-10T03:33:32.000Z</updated>
         <summary type="html"><![CDATA[<p>Nginx的http功能和模块使用广泛，那么Nginx的http框架是如何初始化的呢？http请求的11个处理阶段又是怎么设计的呢？</p>
@@ -90,8 +90,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[zsh替代bash]]></title>
-        <id>https://xly0713.github.io/post/zsh-ti-dai-bash/</id>
-        <link href="https://xly0713.github.io/post/zsh-ti-dai-bash/">
+        <id>http://localhost:4000/post/zsh-ti-dai-bash/</id>
+        <link href="http://localhost:4000/post/zsh-ti-dai-bash/">
         </link>
         <updated>2020-05-01T13:26:09.000Z</updated>
         <summary type="html"><![CDATA[<p>zsh替换bash，可以让命令行操作少敲很多字符👍</p>
@@ -101,8 +101,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[ATS入门]]></title>
-        <id>https://xly0713.github.io/post/ats-ru-men/</id>
-        <link href="https://xly0713.github.io/post/ats-ru-men/">
+        <id>http://localhost:4000/post/ats-ru-men/</id>
+        <link href="http://localhost:4000/post/ats-ru-men/">
         </link>
         <updated>2020-04-12T04:00:50.000Z</updated>
         <summary type="html"><![CDATA[<p>本文是对ATS的安装、配置、日志等相关基础知识的整理。</p>
@@ -112,8 +112,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Nginx源码分析之--内存池]]></title>
-        <id>https://xly0713.github.io/post/nginx-yuan-ma-xue-xi/</id>
-        <link href="https://xly0713.github.io/post/nginx-yuan-ma-xue-xi/">
+        <id>http://localhost:4000/post/nginx-yuan-ma-xue-xi/</id>
+        <link href="http://localhost:4000/post/nginx-yuan-ma-xue-xi/">
         </link>
         <updated>2020-04-11T14:09:35.000Z</updated>
         <summary type="html"><![CDATA[<p>Nginx作为高性能的web服务器，它是如何管理内存的呢？</p>
